@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>ckplayer</title>
+    <script type="text/javascript" src="assets/js/ckplayer.js" charset="UTF-8"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0px;
+            font-family: "Microsoft YaHei", YaHei, "微软雅黑", SimHei, "黑体";
+            font-size: 14px
+        }
+    </style>
+    <style type="text/css">#xmt-collection {
+        position: absolute;
+        display: none;
+        box-shadow: 0 0 0 2px hsla(0, 0%, 100%, .2);
+        font-family: PingFang SC, Source Sans Pro, Hiragino Sans GB, Helvetica Neue, Helvetica, Microsoft Yahei, arial, sans-serif;
+        background: rgba(0, 0, 0, .6);
+        height: 30px;
+        line-height: 30px;
+        color: #fff;
+        border-radius: 4px;
+        font-size: 0;
+        z-index: 9999999;
+        user-select: none;
+        text-align: left;
+        -webkit-font-smoothing: antialiased
+    }
+
+    #xmt-collection a, #xmt-collection div, #xmt-collection dl, #xmt-collection h1, #xmt-collection h2, #xmt-collection h3, #xmt-collection h4, #xmt-collection h5, #xmt-collection h6, #xmt-collection li, #xmt-collection ol, #xmt-collection p, #xmt-collection span, #xmt-collection ul {
+        padding: 0;
+        margin: 0;
+        color: #fff
+    }
+
+    #xmt-collection li {
+        list-style: none
+    }
+
+    #xmt-collection img {
+        border: 0
+    }
+
+    #xmt-collection a {
+        text-decoration: none;
+        outline: none
+    }
+
+    #xmt-collection button, #xmt-collection input[type=submit] {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-appearance: none;
+        border: 0
+    }
+
+    #xmt-collection a {
+        padding-left: 12px;
+        padding-right: 3px;
+        font-size: 14px
+    }
+
+    #xmt-collection .collect-arrow, #xmt-collection a {
+        display: inline-block;
+        cursor: pointer;
+        height: 30px;
+        color: #fff;
+        line-height: 30px
+    }
+
+    #xmt-collection .collect-arrow {
+        position: relative;
+        width: 26px;
+        text-align: center;
+        vertical-align: top
+    }
+
+    #xmt-collection .collect-arrow.active, #xmt-collection .collect-arrow.active:hover {
+        background-color: rgba(0, 0, 0, .7)
+    }
+
+    #xmt-collection .collect-arrow:hover {
+        background-color: rgba(0, 0, 0, .5)
+    }
+
+    #xmt-collection .collect-arrow:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 9px;
+        left: 8px;
+        width: 0;
+        height: 0;
+        margin-top: 3px;
+        border-style: solid;
+        border-width: 5px;
+        border-top-color: #fff;
+        border-left-color: transparent;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        vertical-align: middle
+    }
+
+    #xmt-collection .collect-menu {
+        display: none;
+        position: absolute;
+        top: 36px;
+        left: 0;
+        background: rgba(0, 0, 0, .6);
+        line-height: 30px;
+        font-size: 14px;
+        border-radius: 4px;
+        box-shadow: 0 0 0 2px hsla(0, 0%, 100%, .2);
+        white-space: nowrap;
+        color: #fff
+    }
+
+    #xmt-collection .collect-menu.show {
+        display: block
+    }
+
+    #xmt-collection .collect-menu li {
+        padding: 0 15px;
+        cursor: pointer;
+        line-height: 30px;
+        height: 30px;
+        color: #fff
+    }
+
+    #xmt-collect-loading {
+        font-family: PingFang SC, Source Sans Pro, Hiragino Sans GB, Helvetica Neue, Helvetica, Microsoft Yahei, arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 14px;
+        font-weight: 400;
+        top: 20px;
+        right: 0;
+        display: inline-block;
+        width: 260px;
+        height: 70px;
+        line-height: 70px;
+        text-align: left;
+        padding-left: 20px;
+        color: #fff;
+        background: #000;
+        opacity: .8;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        text-decoration: none
+    }
+
+    #xmt-collect-loading a, #xmt-collect-loading div, #xmt-collect-loading dl, #xmt-collect-loading h1, #xmt-collect-loading h2, #xmt-collect-loading h3, #xmt-collect-loading h4, #xmt-collect-loading h5, #xmt-collect-loading h6, #xmt-collect-loading li, #xmt-collect-loading ol, #xmt-collect-loading p, #xmt-collect-loading span, #xmt-collect-loading ul {
+        padding: 0;
+        margin: 0;
+        color: #fff;
+        line-height: 70px
+    }
+
+    #xmt-collect-loading li {
+        list-style: none
+    }
+
+    #xmt-collect-loading img {
+        border: 0
+    }
+
+    #xmt-collect-loading a {
+        text-decoration: none;
+        outline: none
+    }
+
+    #xmt-collect-loading button, #xmt-collect-loading input[type=submit] {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-appearance: none;
+        border: 0
+    }
+
+    #xmt-collect-loading .xmt-tip-img {
+        display: inline-block;
+        height: 20px;
+        width: 20px;
+        margin-right: 10px;
+        background-size: contain;
+        vertical-align: middle
+    }
+
+    #xmt-collect-loading .xmt-tip-img.load {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAYAAADFeBvrAAAAAXNSR0IArs4c6QAABNRJREFUaAXdmrFvFEcUxnMBohQBYaFISarIwlBYyB1poHDhgqSjSdoUuELQ0tIhQQV/AL1bRGUpV0WICApKFHAUI5GUkYkQShDH7zO7vtnPs8fO7Jw586TPtzP73vfe8+3Mzry5wScFZTQaLUC3DJbASTAPjoDDQPICbIEN8Bg8AsPBYPA7n7MhJLEEboBNkCuyFYf+ER9GcH4aDEFpGUJ4es+ywtlxsAamLfJxPDWxQVcDyA+iew1cAoda7Eb03wd3gcbJ8wp/8Sn5GnxTQePrB/AdaIvjf+7dBFcYZ6/5LCMkcwz8AtpknRur4KtUj7KpbMXRJvJ9LJU7qg/RInja4uke/Wejhhmd4gLijIliWMygHZtAsAK2IuwiPz/WLHslbrAR8atYVrK8YahvJpaMHo25rqTongPPKpxLsJvDJvYYKqa0bwoDjZnYY3aT/gNdg5Ie+kqmlmeJtgcwlE8XxdZtTKF4EAyBy+WUYGpdJ6n7Uz7huOw8tDVRaOadLCjpje2iqTNLnCiLBCN4Yt/UjYl8GOml+Z8Foec46TELnRiX3lNZohiAjynF2v7y5aavAPSsdp4AYpFi35CYTtc+iDRR+Nhei9qjqLWZS++p2QmjzhM64TvvnLR3r/3oHJrivQQ/rarGmf3IhQ7g9JfvMLyvAactgMuZhlJmw0kzaRpmcJ5xXtrjrQcNn9nWGww9Gu64B1XDFF6fIMYzHjd9c3ahYd2jMcWEtBgOZXM7THoWwl6u34DkVXNbzsZdZAzJl2KsYg1dLHzKPdUAQrnP3uPvsGMWr6sYtfcKZVkJjQfTu1vanO0X8ViXlJCqM6Fop7lfxGM9qYTmLXptm/eLeKzzSkh1s1BcKbw3a9ce6xElVBcB62Bdqe6fxU+P9bAScmmrwLjeLLR3xaqEVJ4NRaWmkvIyIHvFS+PzoN330mN9oYS2jFV1s5ISvkyVzAOSOlXIgce6pYR86nOlvr7/MAIVOH4jqYvWn9P0WDeUkE4BQpkPGwWuf4TjifHom7pFUnfAl3YvpemxPtaayBd5RfZBYVT4+ALcBjF5TmdWrQ073xetKqGpLk4tsZ/w9w9w0YL4Ovgs1J90jW50cbptw03fPqxOIutzD1/fgl9BTB7SeaILP3r+ZG3u2HFzahu8HSfBBf5UwbkKXgOXf+nQqcREQWfiBi+2BS9WhG+LjKC0lf4TuEyssKJ81g1oN3cNdAxNqfjkEEsMn0eBl8/Gj0/ECH2fDJpFEtmgNJUyViSeaBf+fwYay6qFfx9VehdntzKWCCDy/5SKer0KjW2B5fQrFuDHLPFCY5VQ8VJwTuAxGxJJLwVXSfmMB9cou1gfCy6nTzEoEJNx6aqNFAMdp+iowiXrOKXNT0o/geQfp8gRBMUOvFICd13i0GMW+2Y0trsdeNWkGBQ5kqz5Uj/xX+5IsnYO6cdzaBwk9b5j/SJFffnjH6iVg7806doWPWZph8V1Ev4JkcZUbKLY9sQfrasugOQSsmwqW1+b0b0j8t1pzOwqMngydRvCPj+Nqasz2mHW0OZMi9C9/2lMnZQ+SUwvX19R0FVc5KP9/DQMqsQ1zj6On5f5P4PEtPXQ6sI3iXR1FtmKo7kFcGcd2p3HUAcuPY4L6C0DBaZDAI2TPf2J5ls86kG3sSzIlwAAAABJRU5ErkJggg==)
+    }
+
+    #xmt-collect-loading .xmt-tip-img.succ {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAYAAADFeBvrAAAAAXNSR0IArs4c6QAABLNJREFUaAXtmr2P3EQYxm/DEQFSIqHQ0KJbgUhxDTqBhLSiOCllKjraiDJd/oBURGlTXLVFujRwNRFHiejoQMAhRZQRSOFLASTz+znz5mxr9zz22vex4pUeeeyZed/n2bHH73h2sjGgFUUxxd0HYBu8Cd4Al8EloP0GnoBD8B34BhxMJpPvOZ4NQ8Q2uAsegb5mX334Q6xkk769Cb5D3ztgVvHxF+XPwQH4FvwAfgWOjOZIvQq2wFvA0dwFL4OwLyncYtS+jgujHhGyBR6AsF8ozMF18ErX4PZJfecc9RVmDIWPYzjfBN4WfwPtD3AbxPOxcmB8XU4+9a0Zy5ibKzuvOsDhFfAF0P4Fe+D1apshy/pOMYylGfvKIDFwdBX8CLSfwTuDOM5wYqwUk0PJ4WpGt+VNcLILnugN+wqMNirLWBgzxeZQcnES6W50dmRCzH3KL3X3MkwPYwM5aHLqNlJ08JmJ2+z+MLRW9wKnECW3vGeKhs5mMQF4m53ayDR/ArkAOWlybJ/9aOQ0qTkBnPgz0xTRPJdT4sahuNusr53TYAs49ztdnthsViORcSK3xFGuy1++VEYGsJfh91SbwNV3ofZgIREqdsrqZxnAmbvVmqTh6q0XGYV5Zd2oPADa7XrN2T2Ta8kY7jWWXHQJoJkcDpab1YKMcAJXc79IaMulx4UU56N03Cdtj1R/BArtLiHoa+NDcK2tNVxdLO6ndqFhY4POsTi73uZkzHp4vAg+BWHvt8WjocsW7VHZlsK0PC2KPzl2Xs+0BcytJ3ZTjLTebesvZyB3bero3CiLRRFD1+Zj8HriLxLzSW4g+u8nDTd8hmIdX58pcr2t2E4xuPBdUr3d7/B83OrgOrhvO0IPk7rWh7BDgKymigHVZ0Yq2SMTQehzzY7YQwUdlsXjUojoOeCRmIOIkRK+TNm0Q08el8XcdPzIwcf0e62PRvoNJiYJcrmjPVbQ07JYFBdzyNH2BRDTvBn58uRwgUPaDyomCbqIX+1pH0EX6PiTvZNli6L94GIWCepzy80g93sS5KFVFG1GEZME1W65XpMCBGcgS9SYYpKg2qTQe9rOETW2mCSoNm3fI6h208quRr8ZWDhSXB/tNqvyJM5NoN1zUlg59cHHDDRFvc21lV+aVeLLysR5nvooaAq0lZJT+s9AVdQ/nFetcwawTED1OgHqyamVXIz3SjWfqvbLKuNnBqqiOC1tFDGJe335kC7Gp6t5FvNjGkF/BqqiRhOTuM+Jpx190uJk0CU4/t4Dn4EuGfMxP9PiKvxfArUl+POWVBwA7fx/JElDt/NMT/lp6Px/xkqi1udDYxJkCrE+n4KTqJjxTDjP3K0nJyA37Whmk/wio9EmcKtCc+vifG+nKBIR67PhFaOGqPXZkqyI2kVY7LN6+534M2VMYGxNLv02jSui1mdbvyLKZyomCnf39sBoo6XvFMNYmrHzNomDdNsRh85+Tum+p7Qx/hpjbuaeT2xkGcuY7ZvDbQKW1eN8C0RGQbFMDuccTeM7f+y3T+o75xiJJsUyRqdPZHL+/+9lzZHjl3Tp4W0Ri0SKnc2++oiNg2aY7PPeI7QoAoSmXPdPfRI7lb9o/geraB3hGmMyvAAAAABJRU5ErkJggg==)
+    }
+
+    #xmt-collect-loading .xmt-tip-img.fail {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAYAAADFeBvrAAAAAXNSR0IArs4c6QAABNxJREFUaAXdmrtrVEEUxl1ZggoJSFC0lQ0KKQSRLdKIhWBpJdpaxDZW/gEWQghYWQjqgunSBewUYyl2goViTCGxEwVFxRfX33czZzP3emf3PiYP98CXeZ7Ht3N39szctPZElCRJpjB3FpwEx8ExMAHGgeQL+AzWwGvwAqy0Wq03lLtDIHESLIB3oK5IVzb0QTSSVl1tnHfRnQdnPBvfqT8CK+AVWAWfgFZGopU6CDrgBNBqngP7gclTKtdZtefWsaUlRDpgCZh8pNIDF8CBqs6l43R7lLJlIh8ivjWC8TbQY/ETSL6CG8C+H40dY2vC2ZRtiXzJZ7uxcd8ABifBEyD5De6Ao/6cmHXZdj7kSyLfk1F8YGgavAWSdXA6iuESRuTL+aRIY5guoRaegpFz4LOsIc/Alq1KKAr5dL4p0li0iVQXlLUyRmaR+r7qVuJoyDdQDBLFVG2lUNB3xh6zxThhNbdCTEZKsZX7TjFRu5ltAHrMdmxl8h+BYgGKSaIYh+9+TNI2KdEGsO3fmTyJfFsxudgokoX8eKbNhA7Q3q/tctt2s0wQJRqKzcWoWMM/vgxaBnCnhN0dnUKs+i2ULBUGwkA3Hd7IAHbdo5YPmlj16FlGobwyKwyuAMmN7MjubSnWNGJiz0RJp44AEiWHlXIz5l8D78FN0CR7P4z+Q7AKZjIBBhrMU+5nCe3m0YNO29l6Ad1gN7oiY3KPSmVS6IjMSzNCWfo7zNye09vc8eiww9mFYOSBAXS1Mr5UIoVinswv+vwzVsDzRjdzdWyRvEt7qEylzST5RlnnPNNCTyR8KUUKhSIyFwcyyA1iQ+cpxS6Z2sOf2bSaJMu5uaWb6FcmhU5jMhYgtpYdh1kRuu0aczahTomN0qSYG42MYsXenONwW43HrnG+DhFfBztDSTEnKhlH6Lzj8FiE1lwjnEL4UQ+pYytIirHoZBwhpWySNRH6kFbLpuNDCDkHRaQe4MffmpUvVtoAQq6xo+OO5IMI/UirSTIWUqjTj80iUs5VmvxGIeM+wDFn+MeWEXKOREork5dLdT6kkA7G+4T2Msm/BAzp1O0/hOKpAmXdVVTOKArsWJela1+ibwrmgYDzG0B+lUr9+Jq9QSWG+5uCVkgX55Iou5wMiQzFE2CXGX+oXwb3gckVKneZG2OlLPZ0l4vyw2pRigwo3M0UPKiVJpn9ohKbmR/WxqmPOcFwkIw3Jzop/GZSn0bJqRfoUDLe3GikIJNNTuWEztrHB6dfmkxsUsSePT64gJoc8CqTiUkKQj0gyRzwmhzBdWw2qZzOoFj0+F010oNKdMfBv0dwt0orDEoqXZIwfzXV2rjLq5XOoJ8ndWsQERtTrM539pLEEeq6QV0Nlb7GYu4M0B1Z6WOzBeSX6IvUVXALHPHHiurMGXyNJSUmjc5FoyM0WlfBjpTteOtaVvXtJnGPmmKTbO5soSCZ1Aaj8zpFRCE0Oi+8bOUgNTqvJD1SOojZe1a9Odv275R8Antrp1jqvTT2SI3Oa32P1Oj844VHSruftnS9BpQoo1DqYed5m1q7lC1nU7Yl8iWf7dpGhylivAMso6CaJoc9SqXxdS77dZ6Rbg9Yokk19WFH62Fh9cdrn+dx2MXKPPBzuP/v38v6H4WrQGw0/gEwT0xtyO34v2j+BVBzOa9sBqlIAAAAAElFTkSuQmCC)
+    }
+
+    #xmt-articleCollect {
+        font-family: PingFang SC, Source Sans Pro, Hiragino Sans GB, Helvetica Neue, Helvetica, Microsoft Yahei, arial, sans-serif;
+        font-size: 14px;
+        position: fixed;
+        font-weight: 400;
+        top: 100px;
+        width: 270px;
+        padding: 0 10px;
+        height: 36px;
+        background: #1b93fb;
+        border-radius: 5px;
+        color: #fff;
+        text-align: center;
+        line-height: 36px;
+        left: 50%;
+        margin-left: -135px;
+        z-index: 9999999999
+    }
+
+    #xmt-articleCollect:before {
+        background: url(data:image/png;base64,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) no-repeat;
+        background-size: contain;
+        margin-right: 10px;
+        vertical-align: middle
+    }
+
+    #xmt-articleCollect:before, .xmt-collect-success:before {
+        content: "";
+        display: inline-block;
+        height: 18px;
+        margin-top: -2px;
+        width: 18px
+    }
+
+    .xmt-collect-success:before {
+        background-image: url(data:image/png;base64,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) !important;
+        background-repeat: no-repeat !important;
+        background-size: contain !important;
+        vertical-align: middle !important
+    }
+
+    .xmt-collect-success a {
+        margin-left: 10px;
+        color: #fff;
+        opacity: .8;
+        text-decoration: underline
+    }
+
+    .xmt-collect-success a:hover {
+        color: #fff !important;
+        background-color: #1b93fb !important;
+        text-decoration: underline !important
+    }
+
+    .xmt-collect-fail {
+        background-color: #f9576b
+    }
+
+    #xmt-collection-mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        font-family: PingFang SC, Source Sans Pro, Hiragino Sans GB, Helvetica Neue, Helvetica, Microsoft Yahei, arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        background-color: rgba(0, 0, 0, .5);
+        text-align: left;
+        z-index: 999999
+    }
+
+    #xmt-collection-mask a, #xmt-collection-mask div, #xmt-collection-mask dl, #xmt-collection-mask h1, #xmt-collection-mask h2, #xmt-collection-mask h3, #xmt-collection-mask h4, #xmt-collection-mask h5, #xmt-collection-mask h6, #xmt-collection-mask li, #xmt-collection-mask ol, #xmt-collection-mask p, #xmt-collection-mask span, #xmt-collection-mask ul {
+        padding: 0;
+        margin: 0
+    }
+
+    #xmt-collection-mask li {
+        list-style: none
+    }
+
+    #xmt-collection-mask img {
+        border: 0
+    }
+
+    #xmt-collection-mask a {
+        text-decoration: none;
+        outline: none
+    }
+
+    #xmt-collection-mask button, #xmt-collection-mask input[type=submit] {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-appearance: none;
+        border: 0
+    }
+
+    #xmt-collection-mask .collect-hide-hint {
+        position: absolute;
+        width: 250px;
+        padding: 20px 15px;
+        top: 50%;
+        left: 50%;
+        background: #fff;
+        border-radius: 4px;
+        margin-left: -125px;
+        margin-top: -100px;
+        font-size: 14px;
+        color: #333;
+        line-height: 1.7
+    }
+
+    #xmt-collection-mask .collect-hide-hint .collect-hint-title {
+        margin-bottom: 10px;
+        text-align: center
+    }
+
+    #xmt-collection-mask .collect-hide-hint .collect-hint-content {
+        margin-bottom: 20px
+    }
+
+    #xmt-collection-mask .collect-hide-hint .collect-hint-content span {
+        padding: 0 5px;
+        color: #1b93fb
+    }
+
+    #xmt-collection-mask .collect-hide-hint .xmt-hint-button {
+        display: block;
+        width: 90px;
+        height: 32px;
+        line-height: 30px;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 3px;
+        text-align: center;
+        color: #fff;
+        background-color: #1b93fb;
+        cursor: pointer;
+        font-size: 14px
+    }
+
+    #xmt-drop-area {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: -100px;
+        height: 100px;
+        max-height: 30vh;
+        text-align: center;
+        line-height: 100px;
+        background: #006eff;
+        transition: all .3s cubic-bezier(.6, 0, .4, 1);
+        opacity: 0;
+        font-family: PingFang SC, Source Sans Pro, Hiragino Sans GB, Helvetica Neue, Helvetica, Microsoft Yahei, arial, sans-serif;
+        font-weight: 400
+    }
+
+    #xmt-drop-area .drop-hint {
+        position: relative;
+        color: #fff;
+        font-size: 14px;
+        line-height: 100px
+    }
+
+    #xmt-drop-area .drop-hint span {
+        vertical-align: middle;
+        line-height: 100px
+    }
+
+    #xmt-drop-area .drop-hint .drop-icon {
+        display: inline-block;
+        margin-right: 12px;
+        width: 21px;
+        height: 14px;
+        vertical-align: middle;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAcCAYAAAAX4C3rAAAABGdBTUEAALGPC/xhBQAAAtVJREFUWAnNmL1PFEEYxl0VQyKWGMOnkUhDo4000kBiQ6IWYoGtjRTExlL/BRurszBaGWOARCsT5avxD5DkLGwoSGgQpTDxg/P37M3sMcvN3t7O5nJP8rvdnXnfd57bnZk9iE4EqFarDZF+C2ZhDAYggl2owgdYjqJom2PnhcEBeA5/oZX+EPAChjvqlAFvwk+QfsMbmIdx6IOzMAb34DXIqPQd7nTELAMtwj+QlkCPO1PEXIRlsHqQmRDaySi6k4cgo4/arUfOQ5OvGnfbzc8VT2HNSfu42zZpB6GGzEp7MGjbSztSVAtHWgotSg07DV6G1nLyKTwEWt1aOC3npJPc5IIaI6AFpnra3nLpZI4o7ZOnYIX98FureAY/D/2+OLOnvqW/B+Z8cen2PEa1mUsr9YP/0xj8RMRqlln635sq0/5qbfYw4FeQxrNS6e+HLwo00nnTO0u7Hr+kHeQXHEAVKjCTNY63zxThUOvzBdGXNql4Kcus3UXqke7nGpeXfePF7QRMwFPYAn3TWL4kOo+aTN9R5TY1S/s1uAS9oDfaFXgC9gtoC5s6Ni6NZ+AZ2DcPpw0dSzANRCyYqNhQI8P5Agu+/HQ7+aPw0dSR2cad5UImbafeHJork+B93EcHIE5m4/nIMZb6OdEOkNukrUlOBNbPmm1XQd1JaQeCVmJchY+keMETSoyCnQYzMqk5qcetOxlkUp6oEaugPyeNQpqzUkWFtXCkihNV8KJeKvyOanhqaYFJVV1odUuTBb05afVSpRk9Z+od6M00YkbackbsjotkrstoN8v+CNqR0W3jdKILHd82njZKX0xlfVnm5jDYN2P521MZRjF4Gt6BtJnU5KK0DT8pWvAELxdgHaQfYOdpvF8FvUILekrSMNMDV+Ex7IK0D9eTIHtCY+aPEmV2UBuM5fz+1b9fHBGg1X8fboD22Fw/TIgLlf4F9Ble8efKarrYf4sfOsOBuCNgAAAAAElFTkSuQmCC);
+        -webkit-background-size: contain;
+        background-size: contain
+    }
+
+    #xmt-drop-area-hightlight {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        border: 1px dashed hsla(0, 0%, 100%, .3);
+        transition: all .2s ease;
+        z-index: -1
+    }
+    </style>
+    <style type="text/css">#js_content {
+        background-color: #fff
+    }
+
+    #activity-name, #js_pc_qr_code, #js_preview_reward, #js_preview_reward_qrcode, #js_sponsor_ad_area, .rich_media_meta_list, .rich_media_tool {
+        transition: opacity .2s linear
+    }
+
+    .xmt-styleArticle-collect {
+        color: #717375;
+        text-align: center;
+        width: 142px;
+        padding: 15px;
+        font-size: 14px;
+        border: 1px solid #e7e7eb;
+        border-radius: 2px;
+        right: -140px;
+        position: absolute;
+        top: 200px;
+        background-color: #fff;
+        display: inline-block
+    }
+
+    .xmt-styleArticle-collect:before {
+        content: "";
+        display: inline-block;
+        width: 125px;
+        margin: 10px 0;
+        height: 30px;
+        background: url(http://extcdn.azber.com/static/img/n_logo.56d6f30.png) no-repeat 50%;
+        background-size: contain
+    }
+
+    .xmt-styleArticle-collect li:first-child, .xmt-styleArticle-collect li:nth-child(2) {
+        margin-top: 0
+    }
+
+    .xmt-styleArticle-collect li {
+        list-style: none;
+        font-size: 12px;
+        float: left;
+        text-align: center;
+        width: 50%;
+        margin-top: 20px;
+        cursor: pointer
+    }
+
+    .xmt-styleArticle-collect li:hover {
+        color: #0590ff
+    }
+
+    .xmt-styleArticle-collect li:before {
+        content: "";
+        display: block;
+        width: 20px;
+        margin: 0 auto;
+        height: 18px;
+        margin-bottom: 6px
+    }
+
+    .xmt-styleArticle-collect .xmt-collectArticle:before {
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAABBBJREFUaAXtWV1Ik1EYdptjjIogKMigqMQh3XVhUBYM04tJGl4MInCJoRPpKooihH6Qfi6CINANNNhF1IJEjKlJMCzs586bwChQw7scw9LKta3n+fom8/P7zPmdz7mxA2fvOe85532f5/yfb6Yig0NXV1c/XNTRjdfrNZtMpqQRLs1GGM2GzQKRbPT6aj4LI7Ja72SjLG9GxMTe8/l8VoiLiUSiGnIvdaICttvdyWRyi2zvsyi7sDNpNpuHysrKHjidzj+mUChkm56eHoWzCoFONtLUaxCqslRWVnbA69mN9CzY1z7Ymy/G0DdgNIogY5A1bW1tYZGOuru7+2D3NG2KPNmxHGqwFAZhluu8wQwn5XSCMCqaxD+zxvy2tra+hOV3svVysilmBoR+ysqcEZhFKczWvNl+C0Q22/wrjEhejghvB3qJ6bWhe2rhYOrAFeeVHiA4NK9OTU2N9PT0bFtvh+giAhKXcLrexBl0DGQCkNIlNBMwIHEG9TsRj8diseFgMGjJpH2qri4iAM7T9QeNIe32+/13UobXIkHiBNo9Qkx1QL/b7Y6vpa2yji4iuDuNWywWN05YyTlG5zLAeZVO1PKYRg7o+xCl9QUbfti7q1Z3LTpdROigpaVlED3anubsIci40vIrkoFAYBemEdvtYCFIDDkcjnQbK9r8T6GbCB3gsunDm+Ae0wBnQXyK9XOYeWXAGrAvLCwMoM5+loHEuNVqdfNxpKybSV4IETrEyFwBqGey860A+gJklr02w+GwJRKJPEaZ9IhD/Rmka5ubm79nAlqtrjAiAJW02WyNkG/pCAD5xA0huT3leGJi4j500tsE9Qi+FqM5kyrXI4URIYimpqZfAFiH+IV5gD6E6GSaAekLlCjn5uDmZsG8iCCUCAHhwfMN64WLfVYLIAi1g8SQVvl69MKJEATWyyeQ4RT6rQTFTYGbg1KvN28IEYLCyLzBGXMO02jp6zvSQW4KekGrtTeMCJ0B9BOIa7LjMWwGnnRisl6IMJQIEWIt3MZ0uo5Yz81ACGoVI9KHBxW9UBWm2Q2hBlWMGT4iKj4NURWIGNKtOozyz8kI20OW6rCz4U1xqPINc1B2PGvCv64jyJykAmSeQ4SZzoFQDTKniBO4B/gR+xbSVWSI2IA0Yy6FBDh0mrHPj2KPP4/MfC6hJ1Zg5g26Edv7e84zKfT29u5cXFw8isyyN4RcvBnFpN1uH/N4PNLldImIEilfcnNzc3uU+mzmS0pKvrpcrhUXUWLSPNmj0WhFPB4PZxO40je+fR2B7oNSz3zeHIiaI4IdjOcL/9raNAHPguimAWMUEM3FruUQ36yGMVoHtMoF6T/iFVmfiS3NqaVlBCT4d3CpVrkIPc4H6TNsJrbyZrH/BZcBYZc02GJvAAAAAElFTkSuQmCC) no-repeat;
+        background-size: contain
+    }
+
+    .xmt-styleArticle-collect .xmt-collectArticle:hover:before {
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAABDpJREFUaAXtWV1oVEcUPudusruhqYLYQrUq1kApgoKFlCotBH8eFH8QXPBFWxRUmmykYqmUQlsobX2Q7hJaFEqhD0UjKGIxSUVYorXVtyj0QRTUEhGNYlkl2U12T78z2Wvjdm90vXO7m2Xn4c6dMzPnfN/8nDNzL1PAKfytnBCidWom20kOM6NoPzn2VVZGY51IZcbd22p9RrzHpjI1NTMjrOP35kFpvDxCe0RoJQRzbY4pfO0r0PeC6oTuq7Z0C9N1R6j37cWUSLXxGLckJXJDqJ+EWm0Z+V/1MJ1dFKXlzk2hfVOWhI6Y0DuXM/RhA143mhFkGg05tGqkg1OmbOmByH4cy2uDqrMZ2SNJWZXPUw/UOtgSG/XxRgFzv20SBb2BZJk4/4pN94dRDg7qtXRWdCMOG+HUeoxjZmqsGfdbJ1JtK7A+IzU5I3o68EvMrw7fSyuckE9v5OmMHyDQsQ/HpNMzf5AXn3dAfBFBdN2LgPoFjC/DUecnERzlykzhpGxG5P9Sjxp/p6lvU7eEylRhmvsikifS6PpQNYFQLJKkr8sBEe2Sd9HvR5AwA8AOnTga41w5Oty2voiMxnnAcSgGGMY4QH0USchOV/lkeeQ7eT03RsdBYnx/MR3KxvmbyfpMVueLiCrOdHCPw/SBawSz1AUyq91yqbz5e3lZRs2Bb4bWM1PvskX/6ijV52ky30TUAA5wBwFmvzEmFAKZI41dsqSU8Ve7pSmTpZOYvflaj34D05opppejUu2fVWaFiBrLxOljLPSjxrBQM2D90pSQJ26bbSkK3blFP2M5mUsc2g+GwrRmaBunnxWwVztrRPQL4qzptAWGfldjesXNCZ2CH5vuGv/tEh1w7yaQpcWhNcO7eNCt95NbI6Igrr/PI9EmWoflck3LAL0QjzZ9N0mow+RwDthXMXUWhRrfmVUiiia9g4c4RKvhye55oVPnkOnkXq/655FbJ6IgMu18Bbe1DSCTKQalTkGdQ7HcbzkQIgpquJPPYTO/BzJYYeMJJLrVKbhlm3lgRBRktpMPg8wnBjDT+VnTaOuU/a0AMl9hJj6LRmm9OgObszBRl/nwMFEQxDvIfJ4NQvEEnYEurQl2An+tEwl8iMs0oDNyv9Cnpcy+FW2ulzj8Vl2gIJDf48aEnIanX2EERMfgYVL6Xu0JwWklTtBrFScwn2S9peVyAF+4pVU7gRL48g0NtNQZaed+RN/taPCoRKNqF6VxPd4y3M4XEHjHU3NSXsoKLYXgiTuEW191Of5YhR06n25nczh9TKQYqN7k7t6l2cXySpbn5Oivq3H+z0FUMXlG9qHb1IofKalKAi+2PejQW5BdLJZruWYCoueM5JnuY93pr62qSXmHHlQNmKCAeG52L4P4TtuHmPOaV70l+Z/Z3by+HF2eS8tTidA8RNUWz3oLFRhd8xm2HFU1s9n/AZcbKQuxnmnLAAAAAElFTkSuQmCC) no-repeat;
+        background-size: contain
+    }
+
+    .xmt-styleArticle-collect .xmt-collectStyle:before {
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAoCAYAAACWwljjAAAAAXNSR0IArs4c6QAAAo9JREFUWAntmD1oU1EUx/NeJCIBhYKD4NBd0VXEITqmioF8DA5dqhSKCg5VFx10UTuIiEM7ikXIx6DYQEHQRRE3RdFRUOggCEqCKCTx9399L9y81+bS5fkK78LNPd/nvHP/3NLjZFitVmt/v9+/A1kYDAb7JItrOY6zRq6XruteLpfL3xwV0+v13iGciKuITfL8yGazh12/M/+7GNU4oVp2QBTEadG2qUql0l7n4vmt1+tTZHrmZyu4JmbiLkZF1Gq1Fb+YjGpxAyYpZ1qQ7SYE6rEL0A3GGmxRCWaccS7plY3rjnSJ65AVQ7Y7t33xVvWJ61BakO0KrRhK3yFbC+PWJw7UVgyl71DcGLHl234YSt8h253Grd9+GErfobgxYsuXOAwlriDrH9egxcyRjjBHWmDA9CSfz98vFot/At1GZ7vd3tntdi8wQDjN3GeeYdSbjezCMnWoEwhJGpmeEXh3o9F4QDGvsDtGgoVOp/OZF/wMdOS/UMmkk41s5SNfxVCsINdmp8sXfwyUDIymA1pns9ksE/gTgedgzeudhF9G/5ZEBWhviZYMZpk96QnXfzT2mVMsxTTkEdLB4ByFLPmavxR4HedV+BvsUyGPF/AH2XtNOT7ewAm/k6Yc+jv7A/t4SP40l8udL5VKX+nmcGBFnDWHIA5f9hyHEyGnIStD7C7ySDbVdrBxBf4SBruGRqPEb3zugrXbYO0X8auo7+ETgYTphs9jDwPCDvf8COVIURho8rFIoKsU89N09oelN5HpmoPr7EM/BMTXNFE17enEHuLdQjZLvAj2kHtDz6FCRiQ5yznDPoDBFwLMVqvV12bgMM2VH8Je4M1gP89Y8H3YxuTp1lH4JT+HfEbGwv8Abt0W+vBIMxYAAAAASUVORK5CYII=) no-repeat;
+        background-size: contain
+    }
+
+    .xmt-styleArticle-collect .xmt-collectStyle:hover:before {
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAoCAYAAACWwljjAAAAAXNSR0IArs4c6QAAAo9JREFUWAntWD9oE1EY/33XmqSLBcHB4uBe0VXEITpaxUF0EBGMhoKo4FB10UEXtYOIONikFTQiiIsiBUHQRRE3RdFRUMwgCBUhdxeb5++75M68pPjqcqZwD473vv/ffd/v3sEn0FUz69EIrwCmSGqdslJcdUCeYyR3Ggfli0TJ+OEbGLMmxST6Q4l8RyG3ebhTmf+bjKanBWGXhjttijOeQLkwHxOp7FV/AgaP27FMUVDxTRK4XJDknOahKwcvzbjLiZUl5KoSQe1YXf11aC5P7MBp1jJXGQeuQm4MOXrueuN/lQ9chbKEXC10Yyi7h1w1TFk+cKB2Yyi7h1LGiCvcCsRQdg+5mpqyfAViKLuHUsaIK9zAYWjgEnL/XOMa3wq3YLE1TfIhxvLXsVOCWLTkPm/y+BqcoGwPhrwpHM69WlKvh8kKyc+Ed8f0T89qZjWq/g38Mi84NtnGZ5qBPqIaHOBMp39aojyVqY7qqo3aqg/15VgeBO8TnSA8lJz1MBvshR98oNNjnCP9aa/BBiZzF7Pha1SaxcRGz8pTmeoki7bqQ32pz78soYMyWq2ZSEck5H4eQ/IEi+YCHe+2bAXPSG+k87UWHxIPnHZZfME30u+ov93myyN4ueMoyWdWrmtghbpEZa8GT2mwwzKyiTqTPIlS/kFU9kZ4huJTrNqIrRZT0uDpKgeZlznI/MEW7mOca+T1QyI2iXa518aAYscPauTZSYkYOrqJ0fxZ7JcFy1Ynt354kW/PNsftlBYhcJvDy3M6UbX075tRLASXIDIZFcESkugMPdsJqVDBONc8yv0Ig4zT8Sd43iRKq1722lp0JdgEMfr10YdMoZx/a8l7ibnmVn6thIgZ74issfBvtIflBRdbSJkAAAAASUVORK5CYII=) no-repeat;
+        background-size: contain
+    }
+
+    .xmt-styleArticle-collect .xmt-someArticle:before {
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAAXNSR0IArs4c6QAAASBQTFRFAAAAv7+/zMzMqqqqtra2v7+/qqqqsbGxqqqqtLS0rq6usbGxqqqqra2tsLCwqqqqrq6uqqqqrKysrq6urKysqqqqra2tqqqqqqqqra2tqqqqqqqqq6urra2tqqqqq6urqqqqq6urq6urqqqqrKysq6urq6urrKysqqqqqqqqq6urrKysq6urq6urq6urq6urq6urq6urqqqqq6urq6urq6urq6urq6urq6urqqqqq6urqqqqq6urq6urqqqqq6urqqqqqqqqqqqqq6urqqqqqqqqq6urqqqqqqqqq6urqqqqq6urqqqqqqqqq6urqqqqq6urqqqqqqqqqqqqq6urq6urqqqqq6urqqqqqqqqqqqqq6urqqqqqqqqq6urqqqqp6yG2wAAAF90Uk5TAAQFBgcIDA0PERYXGxwdJCkqKywxMzU2OTs/QkNERUxUVVhdX2RnaGlsbXF0eoCGlJWWl5qbnqChoqSlqaqrra60ur/Bx8jKzM7T19vc3d/j5+jq7O/09fb3+fv8/f5vWHlhAAABp0lEQVQ4y82U2VbCMBCGowVxRRFwQUVlUwtaRYsLIhSVVRFw3/q//1s49Ri6kJzDpXM18+drmpnJhDHbFveNZv+jW6/sBZncxtU72NbYknHb93BbbVWEjR1ba8/FRGRGmVtOG+8UfWWHualrWnhUlYEwqb2RUhjz7mdxZwGXNntDWt4D0n+/c0PJnRC5686DlJzg4OfAZ9j5KeV7JsrQVwMMR6xSHgFhyUJfQMwOqc6qpLg6ULb7RvVTJOA88OLnwT5QlPa1BWxy3wASUlADNO43gYgUTAGn3O8DM1IwDlS5/wEoUjBKF477XWBupB3rwJIUTAIX3K8AaSl4BBxwf8/dULe1HT0MAu+TEm4FePUNooajqB67AnQ72gLeZoXcGmCGHDFdu5txATfRAS6dwipduxMBWAKepl1Klmbh3OfBAiXBdBVIu11wn69jTbqZ8cxr3hp4fd6uS+nvvfCSbPfTkltaKh7dSB62reApb4rIsOF+eszLaZYRkixWfhlgr/pv/SQk829qp9VGtXgQ4yXYkZDDlvkHZHJUssdGJB9GAVmy97D+A+5GfmwfJ3plAAAAAElFTkSuQmCC) no-repeat;
+        background-size: contain
+    }
+
+    .xmt-styleArticle-collect .xmt-someArticle:hover:before {
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAAXNSR0IArs4c6QAAASBQTFRFAAAAQL//M5n/K6r/JLb/IJ//K5X/J53/Ipn/Hpb/I5f/IZv/HJf/G5v/I5X/HJX/H5X/Hpj/HpT/HZf/H5f/Hpb/HZX/HJf/H5T/Hpf/HJb/G5f7HpT7Hpb7HpT7HpT8G5X8G5P8HZT8G5T8HpT8HJT8G5X9HZP9HZT9HJX9HJP9G5X9HZP9G5T9HJP7HZT7HJT8G5P8G5T8G5X8HJP8HJT8G5T8G5T8HZP8HJT8HJT8HJT8G5T8G5P8HJT8HJP8HJT8HJP8G5T8HJT8HJT7HJP7HJT7HJT7HJT7G5P7HJP7G5P7HJT8HJP8HJT8G5T8HJP8HJT8G5P8G5P8G5T8HJP8G5P8G5T8HJP8HJT8HJP8G5P8G5T8G5P8G5T8G5P70pu8OQAAAF90Uk5TAAQFBgcIDA0PERYXGxwdJCkqKywxMzU2OTs/QkNERUxUVVhdX2RnaGlsbXF0eoCGlJWWl5qbnqChoqSlqaqrra60ur/Bx8jKzM7T19vc3d/j5+jq7O/09fb3+fv8/f5vWHlhAAABp0lEQVQ4y82U2VbCMBCGowVxRRFwQUVlUwtaRYsLIhSVVRFw3/q//1s49Ri6kJzDpXM18+drmpnJhDHbFveNZv+jW6/sBZncxtU72NbYknHb93BbbVWEjR1ba8/FRGRGmVtOG+8UfWWHualrWnhUlYEwqb2RUhjz7mdxZwGXNntDWt4D0n+/c0PJnRC5686DlJzg4OfAZ9j5KeV7JsrQVwMMR6xSHgFhyUJfQMwOqc6qpLg6ULb7RvVTJOA88OLnwT5QlPa1BWxy3wASUlADNO43gYgUTAGn3O8DM1IwDlS5/wEoUjBKF477XWBupB3rwJIUTAIX3K8AaSl4BBxwf8/dULe1HT0MAu+TEm4FePUNooajqB67AnQ72gLeZoXcGmCGHDFdu5txATfRAS6dwipduxMBWAKepl1Klmbh3OfBAiXBdBVIu11wn69jTbqZ8cxr3hp4fd6uS+nvvfCSbPfTkltaKh7dSB62reApb4rIsOF+eszLaZYRkixWfhlgr/pv/SQk829qp9VGtXgQ4yXYkZDDlvkHZHJUssdGJB9GAVmy97D+A+5GfmwfJ3plAAAAAElFTkSuQmCC) no-repeat;
+        background-size: contain
+    }
+
+    .xmt-styleArticle-collect .xmt-readCover:before {
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAeCAYAAABe3VzdAAAAAXNSR0IArs4c6QAAA4dJREFUWAnNmN9Lk1EYx323aaMgwQtJqDAh6KIwS4ugQkNQ3NyMol9YXfYXFNQ/EHXdRdJVEYlQqHNThhcWeJVaSYV0UUEJRsSgXcjyx+zzHTvyss053eT1wOtzznOec57Pnud5z/v6WmW04eHhvYuLiw9XVlaaGdZI52CbsyzrdXl5+Z2Ojo5ZS3ALCwvTAFU5CJXLdayioqLepchtQzgBV4nNk05r6he43W5fZ2fncGrg0J/BwUEfTGG5F5sLuVpzTsMJKhgMRiTTrUaA27p5tpKOFLnD4XA9slF+uDsn/X7/NHK5UL9bFsFIJHIkFApNLC8vTyWTyR5d6kunOUcBBbC0tDRB5BoyQaTTXKGQJUtxNBqtTiQSQc6uUc7Vp4DsSMP9JaV96qO7jKjUHJCyaVov3SUDBC6Cw0bg5pE7DZzH4zlG3X3TmHp8ANi7NGSD6pO+xmu2ktegDU43RZ+BE4H6Jpoa6wdJ5mslA+SQv4GjrxnOWkn9rgzdhoYlAyQ6M16v9wTe3xoCIlRH6idHRkZqpSOldehUh6lGNCdNfy2ZVYNsYHEUXGPBwbUWSe9yuT4AFcJJ0ti1t7fHWH+a9bPIaumRh6jLGXSj1N9ZVJXSs+496/WSkrdlAQqOTZ/nXcUkZ1oZtv1DQ0PdPCLnjT2OFzlCWnnQT6Erl579vFydNpt/3Dw3sV33wC4qxTg9zwH8BqA9xrmkz+f7yPvccQC+2PXqo/vD3CnZZM7lGlsDAwMrZqKrq8vCaSEpPoCdbopUw+kPvQmRsk9GJ4mNW9Ek2o/p15o57Mep1wttbW2/jc4u7UxZgHbDfH3Sewunj7hSZYLTOJCXgIxmrhsbG/PG4/En2Hbb5n5i30V5ZJ2DdsBNpzgQCPTgwC8wOcX5biIVFrgNItVtaWlJ8Bp1nRvrNgpTd/uwH+f970qmvX286QiaTTg6DuNIT5H9Rgf0M/rfzdgusTvH+Ixdh/19fsA9o7NHMOsuNkaFStUddXaSIySE8yatQ67WZyH7YH+XyE+RlVeZ9ptOsX0j7shfpK+ZSPTb9RvpcxpYueyLjqDZVGchkbhIygM4O2r0BcrPpPhlLtuSAWpzIphEDKQvqYpuJUlx0RR5NhDgnJnXv3ym75TMYJizULygdq46BZTPLyXT69I3EIxi+QwdmouJzaUPNPoGIlpAVtPtEJTc6uNRr5jE9h92D8R+2kHVlAAAAABJRU5ErkJggg==) no-repeat;
+        background-size: contain
+    }
+
+    .xmt-styleArticle-collect .xmt-readCover:hover:before {
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAeCAYAAABe3VzdAAAAAXNSR0IArs4c6QAAA3FJREFUWAnVmM9PE1EQx7+zFFu3RA0HookaJDHxoMEfYGKiBg03/AmkrYJ49C/Qg/+A0bMHiSeBSGlEDAETwkFNOCmCRA3xoCZKoiEGI7HbVss+5712l+0vS3GxOgndmXnv7Xw6M+8tXYKUPrEVIn4DEE0Q2KJ85fogfALoMch3BZ00RwrOjM0wT3W5mArEXYC2vl5LZe6fg5PM1ZLNo8pqfYUKrQUdvoeWWZZrb7wFwhxJxRZNhB5D2CBdOtl6ORUHk1ZOjpXE5hKvoUREBUyjHhoaVBQTk9D0GQRoaaVR1w4wktjDcHe4x/fBdOCYxjQiiYsIeF86vAXVtSmxhBPJZwouJzQDyzE5ZwXiXgbvixr8NE7D1MZhJmXmvCo+4RsEDaR0EeQHwUYIHhM8JyIai5XbPcAfxihDNUAzDQbQbTiPZz/afO+UPRi/jmRySkGq0nN/AlNqrMCH+yW24GRAmTkLTtpSt7IpbWvzSL2AuAe4ztPFz9C3WXGaMSb8Wb6STPcAW72zfIQc5PI9XSYQdfgancRQrFb5BuN1IO5DS+SxU0Rye1AIwkD8PMjcWWTtCwT0YRAtHyIBWkC3OIxNxhz3YU16/S4kzFkMRMe5/46m+k+O0LQ6E4sEyX3UhWMdwFJfkXWpYaIh6HonTpKRMV+dgcnn3ISVGX7LIEqAPLyDC5yFrj3qhDiLqPEEke+brdjqKgNrngMg7U2GXxn0BRWVhwrCZS3IzeDKSryDS8ibIi1EHyA8LQh5X1kudZWPOhFt5nLe4vm19hjRBCr1NrTSvO1zKo4M5gI6J/5OD0cvgXCTA1t9vMh2AMGqsZxlj4QP89Hb3H+dy2P0kfUzCPlzz0EH4Op3ccjfzT12goMspoNu4EyNQIJnyzGKM/gF/gKXeVOl/1EQ29ieQNgIZU932qvPoHWXcGI3KDnKmdxuuRiih/X3tu1UhDjO5hGni+dfQ9B/1fY5MvjngPKucpMIGmbIRjtIqQpp7Qjqg2qZA3D1JXYCBKo+83HTxJkYcrpL0okLnkesBs8zVKJLnoVCtCNinOKVe0taLeg1H/r38q1xD1DePfVUecCa/HNF3CmxKyj5b6Jx5fmXfFrkT75yi5OB2Qi9sbvcO+fKzZU3PlH/f/Dqg1/QyHcg3OD9GeXO+5X+glO2nGSRTMz2CxgEO9beb8TMAAAAAElFTkSuQmCC) no-repeat;
+        background-size: contain
+    }
+
+    #xmt-articlecollect-start, #xmt-stylecollect-start {
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        width: 90px;
+        font-size: 12px;
+        color: #fff;
+        -webkit-appearance: none;
+        border: none;
+        background-color: #1b93fb;
+        border-radius: 30px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+        margin-top: 5px
+    }
+
+    #xmt-stylecollect-start.cancel {
+        background-color: #d9dadc;
+        color: #717375
+    }
+
+    #xmt-stylecollect-start-tip {
+        position: fixed;
+        width: 400px;
+        top: 200px;
+        left: 50%;
+        margin-left: -175px;
+        height: 40px;
+        line-height: 41px;
+        font-size: 16px;
+        color: #fff;
+        border-radius: 20px;
+        background-color: #222;
+        text-align: center;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        opacity: .8;
+        z-index: 1000
+    }
+
+    #xmt-stylecollect-exit {
+        display: inline-block;
+        padding: 0 10px;
+        height: 24px;
+        line-height: 26px;
+        background-color: #636363;
+        border-radius: 4px;
+        margin-left: 10px;
+        font-size: 14px;
+        vertical-align: initial;
+        cursor: pointer
+    }
+
+    #xmt-stylecollect-mask {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        cursor: crosshair
+    }
+
+    #xmt-stylecollect-block {
+        position: absolute;
+        background-color: hsla(52, 95%, 69%, .1);
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        cursor: hand;
+        visibility: hidden;
+        cursor: -webkit-grab;
+        cursor: grab
+    }
+
+    #xmt-stylecollect-block.dragging {
+        cursor: -webkit-grabbing;
+        cursor: grabbing
+    }
+
+    #xmt-stylecollect-block.clipping {
+        cursor: crosshair
+    }
+
+    .xmt-stylecollect-borders div {
+        position: absolute;
+        background-color: rgba(27, 147, 251, .5);
+        background-image: url(data:image/gif;base64,R0lGODlhCAAIAIABAGZmZgAAACH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkM2NlZWViMy03YjM5LTQ2ZTEtYTk2NC03NWNiZTJhNmZkYTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTE4OEM3N0QzODdFMTFFNzgzQjBEOUY2MTdGNDY2NzUiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTE4OEM3N0MzODdFMTFFNzgzQjBEOUY2MTdGNDY2NzUiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpkM2NlZWViMy03YjM5LTQ2ZTEtYTk2NC03NWNiZTJhNmZkYTIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6ZDNjZWVlYjMtN2IzOS00NmUxLWE5NjQtNzVjYmUyYTZmZGEyIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8+PTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkECQoAAQAsAAAAAAgACAAAAg+MA3mol7CeY9C8SvF1qgAAIfkECQoAAQAsAAAAAAgACAAAAg5EHqCYi2qek/FAWmFWBQAh+QQJCgABACwAAAAACAAIAAACDgSCYZebap6TsVU04TUFACH5BAkKAAEALAAAAAAIAAgAAAIOhINhkHq5WpQPTVsdswUAIfkECQoAAQAsAAAAAAgACAAAAg8MHmmoB7pec5BOmWxmoQAAIfkECQoAAQAsAAAAAAgACAAAAg9MgGYIeqmYYy3CdV/FtQAAIfkEBQAAAQAsAAAAAAgACAAAAg6MgXapCBocdK+xVfFMBQA7)
+    }
+
+    .xmt-stylecollect-borders .border-top {
+        height: 1px;
+        left: 0;
+        right: 0;
+        top: 0;
+        background-repeat: repeat-x
+    }
+
+    .xmt-stylecollect-borders .border-right {
+        width: 1px;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-repeat: repeat-y
+    }
+
+    .xmt-stylecollect-borders .border-bottom {
+        height: 1px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-repeat: repeat-x
+    }
+
+    .xmt-stylecollect-borders .border-left {
+        width: 1px;
+        left: 0;
+        bottom: 0;
+        top: 0;
+        background-repeat: repeat-y
+    }
+
+    .xmt-selected {
+        position: relative
+    }
+
+    .xmt-selected:after {
+        content: "";
+        background-color: rgba(27, 147, 251, .2);
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 10
+    }
+
+    #xmt-stylecollect-tip {
+        position: absolute;
+        top: -30px;
+        left: 0;
+        padding-bottom: 15px
+    }
+
+    #xmt-stylecollect-start {
+        margin-bottom: 15px
+    }
+
+    #xmt-stylecollect-tip .xmt-func-btn {
+        min-width: 200px;
+        text-align: center;
+        cursor: default;
+        margin-left: 0;
+        vertical-align: top;
+        box-sizing: border-box
+    }
+
+    #xmt-stylecollect-func {
+        position: absolute;
+        bottom: -35px;
+        right: 0;
+        padding-top: 10px;
+        min-width: 180px;
+        text-align: right
+    }
+
+    .xmt-func-btn {
+        display: inline-block;
+        padding: 0 12px;
+        vertical-align: bottom;
+        height: 24px;
+        line-height: 24px;
+        border-radius: 12px;
+        color: #fff;
+        background-color: #222;
+        font-size: 12px;
+        text-align: center;
+        margin-left: 10px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none
+    }
+
+    .xmt-stylecollect-handle {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        min-width: 16px;
+        min-height: 16px;
+        text-align: center;
+        line-height: 16px
+    }
+
+    .xmt-stylecollect-handle:after {
+        content: "";
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        vertical-align: top;
+        margin-top: 2px;
+        background-color: #1b93fb;
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
+        border: 1px solid #fff
+    }
+
+    #block-handle-b:after, #block-handle-l:after, #block-handle-r:after, #block-handle-t:after {
+        width: 8px;
+        height: 8px;
+        margin-top: 3px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px
+    }
+
+    #block-handle-bl:hover:after, #block-handle-br:hover:after, #block-handle-tl:hover:after, #block-handle-tr:hover:after {
+        width: 14px;
+        height: 14px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius: 8px;
+        margin-top: 0
+    }
+
+    #xmt-stylecollect-block.clipping .xmt-stylecollect-handle {
+        display: none
+    }
+
+    #block-handle-tl {
+        top: -8px;
+        left: -8px;
+        cursor: nwse-resize
+    }
+
+    #block-handle-t {
+        top: -8px;
+        left: 50%;
+        margin-left: -8px;
+        cursor: ns-resize
+    }
+
+    #block-handle-tr {
+        top: -8px;
+        right: -8px;
+        cursor: nesw-resize
+    }
+
+    #block-handle-l {
+        left: -8px
+    }
+
+    #block-handle-l, #block-handle-r {
+        top: 50%;
+        margin-top: -8px;
+        cursor: ew-resize
+    }
+
+    #block-handle-r {
+        right: -8px
+    }
+
+    #block-handle-bl {
+        bottom: -8px;
+        left: -8px;
+        cursor: nesw-resize
+    }
+
+    #block-handle-b {
+        bottom: -8px;
+        left: 50%;
+        margin-left: -8px;
+        cursor: ns-resize
+    }
+
+    #block-handle-br {
+        bottom: -8px;
+        right: -8px;
+        cursor: nwse-resize
+    }
+
+    #xmt-stylecollect-alert {
+        display: none;
+        position: absolute;
+        width: 180px;
+        height: 140px;
+        padding-top: 40px;
+        left: 50%;
+        margin-left: -70px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        color: #fff;
+        text-align: center;
+        background-color: rgba(0, 0, 0, .7)
+    }
+
+    #xmt-stylecollect-alert:before {
+        content: "";
+        display: block;
+        width: 45px;
+        height: 31px;
+        margin: 0 auto 15px;
+        font-size: 18px;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAAA+BAMAAABZ4xF9AAAAJ1BMVEUAAAD///////////////////////////////////////////////+uPUo5AAAADHRSTlMAMe1fKehrF9bVvqQ8h1RDAAAAtklEQVRIx+3QoQ0CYRQE4ZdAgqUFOkAgERg6QCIogyIQ0AcloEju1BZ1cuTuS07+U8AnpvJO1WgzXSrvrFuDlsADWno3aP33Hfow6EEPumh37NDPuUO/9GjQ0pwP+UrgdshV4P719g5uaXBPg4c0uKfBQxrc0+AhDe5p8JAG9zR4SIN7GjykwT0NHtLgngYPaXBoj0MnOHSEQyc4dIL/oAMcOsGhPQ4d4tAeh45w6ASHTvBPrdYCudsHltdLTTMAAAAASUVORK5CYII=);
+        background-repeat: no-repeat;
+        -webkit-background-size: contain;
+        background-size: contain;
+        background-position: 50%
+    }
+
+    #xmt-stylecollect-alert.fail:before {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAANlBMVEUAAAD////////////////////////////////////////////////////////////////////xY8b8AAAAEXRSTlMA8TdE+PZXSCnoHNzfCtiIdVnKQRwAAADXSURBVFjD7dc7EoMwFEPRZyBgEvJ5+99sCo9RoUoiTWbs/tzGheX4zXle9PfXaqj5qN0/Mlfd33Kvp0dB8NkKzaMg+FaYSqIg+lzmcArwWwQVRE8F0VNB9VxQPRdUzwXVc0H1XFA9F1TPBdVzQfVcUD0XVM8Fy3OBvVZgrxXYiwXycoG8XCCvFt7k1QK8V4D3CvBuwfe4v8zV9iiYHgXXo2D65VNQcPzm7Qf4sR/Gfhj7YeyH/9oPcdj7obQfa93N/VCmiF7Q90PzZ8HYD833wqy/3fCXzhfenTVSutDogwAAAABJRU5ErkJggg==)
+    }
+
+    .xmt_cover-download {
+        width: 660px !important;
+        margin-left: -330px;
+        background: #fff
+    }
+
+    .xmt_cover-download img {
+        margin: 10px;
+        width: 640px
+    }
+
+    .xmt_cover-download .bom {
+        border-top: 1px solid #e8e8e8;
+        height: 50px
+    }
+
+    .xmt_cover-download .bom a {
+        cursor: pointer;
+        margin-top: 10px;
+        width: 90px;
+        height: 30px;
+        border-radius: 20px;
+        display: inline-block;
+        text-align: center;
+        line-height: 30px;
+        margin-left: 160px
+    }
+
+    .xmt_cover-download .bom a:hover {
+        text-decoration: none
+    }
+
+    .xmt_cover-download .bom .download {
+        background: #1b93fb;
+        color: #fff
+    }
+
+    .xmt_cover-download .bom .download:hover {
+        background: #1b4ffb
+    }
+
+    .xmt_cover-download .bom .cancel {
+        border: 1px solid #e7e7eb;
+        color: #999
+    }
+
+    .xmt_cover-download .bom .cancel:hover {
+        background-color: #e7e7eb
+    }
+    </style>
+    <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+    .en-markup-crop-options {
+        top: 18px !important;
+        left: 50% !important;
+        margin-left: -100px !important;
+        width: 200px !important;
+        border: 2px rgba(255, 255, 255, .38) solid !important;
+        border-radius: 4px !important;
+    }
+
+    .en-markup-crop-options div div:first-of-type {
+        margin-left: 0px !important;
+    }
+    </style>
+</head>
+<body cz-shortcut-listen="true">
+<div id="video" style="width: 600px; height: 400px; background-color: rgb(0, 0, 0); overflow: hidden; position: relative;">
+    <div class="ckplayerchytkexyyaxhadikmq" style="background-color: rgb(0, 0, 0); width: 100%; height: 100%;">
+        <video id="chmptijdmiivmnyotd" width="100%" height="100%" poster="assets/mv/img/poster.jpg" loop="loop"
+               x5-playsinline="" playsinline="" webkit-playsinline="true"
+               style="width: 100%; height: 100%; background-color: rgb(0, 0, 0);">
+            <source src="http://img.ksbbs.com/asset/Mon_1703/eb048d7839442d0.mp4" type="video/mp4">
+            <source src="http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4" type="video/mp4">
+            <source src="http://img.ksbbs.com/asset/Mon_1703/d0897b4e9ddd9a5.mp4" type="video/mp4">
+            <source src="http://img.ksbbs.com/asset/Mon_1703/d30e02a5626c066.mp4" type="video/mp4">
+        </video>
+        <div class="controlbgbarchfarfojndaf"
+             style="width: 100%; height: 38px; background-color: rgb(0, 0, 0); position: absolute; bottom: 0px; opacity: 0.8; z-index: 90; display: block;"></div>
+        <div class="controlbarchfarfojndaf"
+             style="width: 100%; height: 38px; position: absolute; bottom: 0px; z-index: 90; display: block;">
+            <div class="playchfarfojndaf" data-title="点击播放"
+                 style="width: 38px; height: 38px; float: left; overflow: hidden; cursor: pointer; display: none;">
+                <canvas class="playchfarfojndaf-canvas" width="38" height="38"></canvas>
+            </div>
+            <div class="pausechfarfojndaf" data-title="点击暂停"
+                 style="width: 38px; height: 38px; float: left; overflow: hidden; cursor: pointer; display: block;">
+                <canvas class="pausechfarfojndaf-canvas" width="38" height="38"></canvas>
+            </div>
+            <div class="dlinechfarfojndaf-la"
+                 style="width: 0px; height: 38px; overflow: hidden; border-left: 1px solid rgb(48, 48, 48); border-right: 1px solid rgb(21, 21, 21); opacity: 0.9; float: left; display: block;"></div>
+            <div class="frontchfarfojndaf" data-title="上一集"
+                 style="width: 38px; height: 38px; float: left; overflow: hidden; cursor: pointer; display: none;">
+                <canvas class="frontchfarfojndaf-canvas" width="38" height="38"></canvas>
+            </div>
+            <div class="dlinechfarfojndaf-lb"
+                 style="width: 0px; height: 38px; overflow: hidden; border-left: 1px solid rgb(48, 48, 48); border-right: 1px solid rgb(21, 21, 21); opacity: 0.9; float: left; display: none;"></div>
+            <div class="nextchfarfojndaf" data-title="下一集"
+                 style="width: 38px; height: 38px; float: left; overflow: hidden; cursor: pointer; display: none;">
+                <canvas class="nextchfarfojndaf-canvas" width="38" height="38"></canvas>
+            </div>
+            <div class="dlinechfarfojndaf-lc"
+                 style="width: 0px; height: 38px; overflow: hidden; border-left: 1px solid rgb(48, 48, 48); border-right: 1px solid rgb(21, 21, 21); opacity: 0.9; float: left; display: none;"></div>
+            <div class="timetextchfarfojndaf"
+                 style="line-height: 38px; color: rgb(255, 255, 255); font-family: arial; font-size: 16px; padding-left: 10px; float: left; overflow: hidden; cursor: default; display: block;">
+                00:41 / 03:58
+            </div>
+            <div class="fullchfarfojndaf" data-title="点击全屏"
+                 style="width: 38px; height: 38px; float: right; overflow: hidden; cursor: pointer; display: block;">
+                <canvas class="fullchfarfojndaf-canvas" width="38" height="38"></canvas>
+            </div>
+            <div class="escfullchfarfojndaf" data-title="退出全屏"
+                 style="width: 38px; height: 38px; float: right; overflow: hidden; cursor: pointer; display: none;">
+                <canvas class="escfullchfarfojndaf-canvas" width="38" height="38"></canvas>
+            </div>
+            <div class="dlinechfarfojndaf-ra"
+                 style="width: 0px; height: 38px; overflow: hidden; border-left: 1px solid rgb(48, 48, 48); border-right: 1px solid rgb(21, 21, 21); opacity: 0.9; float: right; display: block;"></div>
+            <div class="definitionchfarfojndaf" data-title="点击选择清晰度"
+                 style="line-height: 38px; color: rgb(255, 255, 255); float: right; font-size: 14px; text-align: center; overflow: hidden; display: block; cursor: pointer; width: 100px;">
+                英文高清
+            </div>
+            <div class="dlinechfarfojndaf-rb"
+                 style="width: 0px; height: 38px; overflow: hidden; border-left: 1px solid rgb(48, 48, 48); border-right: 1px solid rgb(21, 21, 21); opacity: 0.9; float: right; display: block;"></div>
+            <div class="playbackratechfarfojndaf" data-title="点击选择速度"
+                 style="line-height: 38px; color: rgb(255, 255, 255); float: right; font-size: 14px; text-align: center; overflow: hidden; display: block; cursor: pointer; width: 80px;">
+                正常
+            </div>
+            <div class="dlinechfarfojndaf-rc"
+                 style="width: 0px; height: 38px; overflow: hidden; border-left: 1px solid rgb(48, 48, 48); border-right: 1px solid rgb(21, 21, 21); opacity: 0.9; float: right; display: block;"></div>
+            <div class="volumechfarfojndaf"
+                 style="width: 110px; height: 38px; overflow: hidden; float: right; display: block;">
+                <div class="volumedbgchfarfojndaf"
+                     style="width: 110px; height: 38px; overflow: hidden; float: right; position: absolute;">
+                    <div class="volumebgchfarfojndaf"
+                         style="width: 100px; height: 6px; overflow: hidden; border-radius: 5px; cursor: pointer; position: absolute; top: 16px; background-color: rgb(102, 102, 102);">
+                        <div class="volumeupchfarfojndaf"
+                             style="width: 80px; height: 6px; overflow: hidden; border-radius: 5px; cursor: pointer; background-color: rgb(7, 130, 245);"></div>
+                    </div>
+                    <div class="volumebochfarfojndaf"
+                         style="width: 12px; height: 12px; overflow: hidden; border-radius: 50%; position: absolute; background-color: rgb(255, 255, 255); top: 13px; left: 74px; cursor: pointer;">
+                        <div class="volumebwchfarfojndaf"
+                             style="width: 6px; height: 6px; overflow: hidden; border-radius: 50%; position: absolute; background-color: rgb(7, 130, 245); left: 3px; top: 3px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mutechfarfojndaf" data-title="点击静音"
+                 style="width: 38px; height: 38px; float: right; overflow: hidden; cursor: pointer; display: block;">
+                <canvas class="mutechfarfojndaf-canvas" width="38" height="38"></canvas>
+            </div>
+            <div class="escmutechfarfojndaf" data-title="取消静音"
+                 style="width: 38px; height: 38px; float: right; overflow: hidden; cursor: pointer; display: none;">
+                <canvas class="escmutechfarfojndaf-canvas" width="38" height="38"></canvas>
+            </div>
+            <div class="dlinechfarfojndaf-rd"
+                 style="width: 0px; height: 38px; overflow: hidden; border-left: 1px solid rgb(48, 48, 48); border-right: 1px solid rgb(21, 21, 21); opacity: 0.9; float: right; display: block;"></div>
+        </div>
+        <div class="timeprogressbgchfarfojndaf"
+             style="width: 100%; height: 6px; background-color: rgb(63, 63, 63); overflow: hidden; position: absolute; bottom: 38px; z-index: 88; display: block;">
+            <div class="loadprogresschfarfojndaf"
+                 style="width: 223px; height: 6px; position: absolute; bottom: 38px; top: 0px; z-index: 91; background-color: rgb(111, 111, 111);"></div>
+            <div class="timeprogresschfarfojndaf"
+                 style="width: 98px; height: 6px; position: absolute; bottom: 38px; top: 0px; z-index: 91; background-color: rgb(7, 130, 245);"></div>
+        </div>
+        <div class="timebobgchfarfojndaf"
+             style="width: 100%; height: 14px; overflow: hidden; position: absolute; bottom: 34px; cursor: pointer; z-index: 92; display: block;">
+            <div class="timebochfarfojndaf"
+                 style="width: 14px; height: 14px; overflow: hidden; border-radius: 50%; background-color: rgb(255, 255, 255); cursor: pointer; position: absolute; top: 0px; z-index: 20; left: 98px;">
+                <div class="timebwchfarfojndaf"
+                     style="width: 8px; height: 8px; overflow: hidden; border-radius: 50%; position: absolute; background-color: rgb(7, 130, 245); left: 3px; top: 3px;"></div>
+            </div>
+            <div class="promptchiczze" data-time="30" data-words="提示点文字01"
+                 style="width: 6px; height: 6px; background-color: rgb(255, 255, 255); position: absolute; top: 4px; left: 72px; display: block; z-index: 1; border-radius: 6px;"></div>
+            <div class="promptchezyqb" data-time="150" data-words="提示点文字02"
+                 style="width: 6px; height: 6px; background-color: rgb(255, 255, 255); position: absolute; top: 4px; left: 374px; display: block; z-index: 1; border-radius: 6px;"></div>
+        </div>
+        <div class="promptbgchfarfojndaf"
+             style="height: 30px; line-height: 30px; color: rgb(255, 255, 255); font-size: 14px; text-align: center; position: absolute; border-radius: 5px; padding-left: 5px; padding-right: 5px; bottom: 46px; display: none; z-index: 95; background-color: rgb(0, 0, 0); opacity: 0.5; width: 80px; left: 650px;"></div>
+        <div class="promptchfarfojndaf"
+             style="height: 30px; line-height: 30px; color: rgb(255, 255, 255); font-size: 14px; text-align: center; position: absolute; border-radius: 5px; padding-left: 5px; padding-right: 5px; bottom: 46px; display: none; z-index: 95; width: 80px; left: 650px;">
+            退出全屏
+        </div>
+        <div class="definitionpchfarfojndaf"
+             style="line-height: 30px; color: rgb(255, 255, 255); overflow: hidden; position: absolute; bottom: 4px; background-color: rgb(0, 0, 0); text-align: center; z-index: 95; cursor: pointer; display: none; width: 100px;">
+            <p style="color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 14px; border-bottom: 1px solid rgb(40, 40, 40);">
+                中文标清</p>
+            <p style="color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 14px; border-bottom: 1px solid rgb(40, 40, 40);">
+                中文高清</p>
+            <p style="color: rgb(7, 130, 245); margin: 0px; padding: 0px; font-size: 14px; border-bottom: 1px solid rgb(40, 40, 40);">
+                英文高清</p>
+            <p style="color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 14px; border-bottom: 1px solid rgb(40, 40, 40);">
+                英文超清</p>
+            <p style="color: rgb(7, 130, 245); margin: 0px; padding: 0px; font-size: 14px;">英文高清</p></div>
+        <div class="playbackratepchfarfojndaf"
+             style="line-height: 30px; color: rgb(255, 255, 255); overflow: hidden; position: absolute; bottom: 4px; background-color: rgb(0, 0, 0); text-align: center; z-index: 95; cursor: pointer; display: none; width: 80px;">
+            <p style="color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 14px; border-bottom: 1px solid rgb(40, 40, 40);">
+                4倍速</p>
+            <p style="color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 14px; border-bottom: 1px solid rgb(40, 40, 40);">
+                2倍速</p>
+            <p style="color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 14px; border-bottom: 1px solid rgb(40, 40, 40);">
+                1.5倍</p>
+            <p style="color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 14px; border-bottom: 1px solid rgb(40, 40, 40);">
+                1.25倍</p>
+            <p style="color: rgb(7, 130, 245); margin: 0px; padding: 0px; font-size: 14px; border-bottom: 1px solid rgb(40, 40, 40);">
+                正常</p>
+            <p style="color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 14px; border-bottom: 1px solid rgb(40, 40, 40);">
+                0.5倍</p>
+            <p style="color: rgb(7, 130, 245); margin: 0px; padding: 0px; font-size: 14px;">正常</p></div>
+        <div class="pausecenterchfarfojndaf"
+             style="width: 80px; height: 80px; border-radius: 50%; position: absolute; display: none; cursor: pointer; z-index: 100; left: 260px; top: 160px;">
+            <canvas class="pausecenterchfarfojndaf-canvas" width="80" height="80"></canvas>
+        </div>
+        <div class="loadingchfarfojndaf"
+             style="width: 60px; height: 60px; position: absolute; display: none; z-index: 100; left: 270px; top: 170px;">
+            <canvas class="loadingchfarfojndaf-canvas" width="60" height="60"
+                    style="transform: rotate(112deg);"></canvas>
+        </div>
+        <div class="errortextchfarfojndaf"
+             style="width: 120px; height: 30px; line-height: 30px; color: rgb(255, 255, 255); font-size: 14px; text-align: center; position: absolute; display: none; z-index: 100; cursor: default; left: 240px; top: 185px;">
+            加载出错
+        </div>
+        <div class="logochfarfojndaf"
+             style="height: 30px; line-height: 30px; color: rgb(255, 255, 255); font-family: Arial; font-size: 28px; text-align: center; position: absolute; float: left; left: 493px; top: 20px; z-index: 100; opacity: 0.8; cursor: default;">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFcAAAAUCAYAAAD4BKGuAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAVTSURBVHja1Fl/aJVVGP4cw/mH5tUWi3I53cA0WbeIzMgaq6lQoVawm0S6glHhIKM/TELICotqCxMSGWQRdFfRLEhc9mMxqA0rbdS2wsV0GkZXuaKUWlHvgeeNh7f3u1du3Ft74eGcnXu+c873vD/Pt0nZbDZyZL2gWZAQTBH8IjggeEjgPZASPIB+g/P7EsGT6J/BfHfjHFIv2Jpjj/+dlDskvCm42Jk7X3C7YJOgw/z2oOBGwdEYRW0RVAjOCZ4ugNggqwU3CTLRBJFyQ+xuwVRY14igB78tE9QKpgmeEHwkGKRnq9AeMesHRWwEsYGUxwSdBZ51ecweE4Lct0DsOVjaZvptA8jfC4JfghWpXIJ2jMY+EDShf1pwh6DvX5x1GtpDE43cNFlfhyFWpQ9xd5FgFo3fRi++C+2nCBNBRgU3O6RsEyyEQv4QLMb4CcE9RlFBLqS1WZ6BZ83A35ofVhuvfE5QJrjWebdgCJOx51qM1QgewbMzsO57MDQrB9DeC8ObHd5Xyb2eiNiQQxmtgkZBr+OuZwV7BIcF1RgbF1wTE2MbEccX48VY9sMzBilhTke/m+b1Q9lefpgruI7OsYhIGzPJuAnn3+6EM7vu1YKl5vkrYRSfCGZivCxoMklk7M5j6eFlXyRNRSAvAoFf0Fo/CC7LkbwuQjsZsf0qwbuI9wlYgIqGl6NEzDYibJ/gbmAfxpKoMDRcaSK8xZzjZbK+NMhSYoNSngV5e+ksKXp+JdqZwDDmdpSbsqa9gNAyi5JalSGv3iQ+dtNK9HvI+sNBh2AhvNYVaH+msRtAdsa4ehoKCuQsoP2PY8+kCSkJ5IRWjD2FZ4/BOFSWYv9KhI40eUKQ31CqdnLM1c1OOnHufKSS+iEZvgHNhji8g1yT5VZKdCnHO+ajvrYK/I7GkuSWjwvq8Mzl5M79NF89aCHaBNXmWv0sQVUUZEDwsDnbr2i9s31lKyGuFs7kITEBC+snJaToRYIFrRN0CeYgoSUxJ23WUm85eB41b4IUuIvGtyIMVMY8lzHGMoYworF7J/onKYk10/wVQL6zXYr+Zq9aOEhuXZPDel8Q3If+HMzTeHPKlForEK+mws3SMfH2UMxNLIJbasKsoIQZwVLbKFkN4T1C3HxUMM+EkCAfgjwNV40Y304KriOP+jIHqa+jvYsqnH/kqzKaGCFZxWnoTqooxky8+dHUsOGwr6Jfi9jmlVVTHGLnot9L3qGWqCToWYYRF5fDa96mtb93yI2g8B0IWxlTHWmi/hOG00D4mEJfJ5WhQX7ySCsDUaNkJeud6+sgXCgs3OLEG2/xdZSh10JBeiB1zQU0HuQdSib60rOdm9kFToIL8hmFiRHzm1YM0ylet5k579OFpcUk4I0oD0/QuJ7tcBy5ERY6ixdrh5uNwN3bUV7pd4E+J958HmPxbRRydqK/in6vxj5aH9din/udEPKtuU1GqBL24xJwBInQWiHLcbQVKBXTzkVpHP0tWHsIpZUqPeWcrScXuX2ImRkqlufBhdQl15ig3WLKH0/SeAmtD+uprBqGx1ThhlWN5LKG4lcNKbDblFDjVDU0wWK7yLLqnPNk6cKzKsfXt1GQmQQXSuwymhd3tr9lkvPJMUV152kc2PsmUEMxtzdPRk2SNX2DQ3Vhr02Is18LXjHVAz/bG0NEK8johus3UBiwyfkYlDkQUyLaWrwZBrbHMaB8Z3PJLaYk8IIVKKPSJdxbv3ecynNzLNr33GKLV1YVW4IyfycXfq0UxP4X5HJdXCqX4Wv0AKqYkkipw4LG6WxMNi+GhAtH+M/K8wVe7wuWvwQYAFT+UsGCXmX3AAAAAElFTkSuQmCC"
+                 border="0"></div>
+        <div class="chbrcsczggly" data-x="0" data-y="253"
+             style="width: 36000px; height: 101px; background-color: rgb(0, 0, 0); position: absolute; left: 0px; top: 253px; display: none; z-index: 80;">
+            <canvas class="chbrcsczggly0-canvas" width="18000" height="101"></canvas>
+            <canvas class="chbrcsczggly1-canvas" width="18000" height="101"></canvas>
+            <img src="assets/mv/img/mydream_en1800_1010_01.png" class="chbrcsczggly0" style="display: none;"><img
+                src="assets/mv/img/mydream_en1800_1010_02.png" class="chbrcsczggly1" style="display: none;"></div>
+        <div class="chbrcsczgglyd2"
+             style="width: 180px; height: 89px; position: absolute; border: 5px solid rgb(7, 130, 245); left: 560px; top: 814px; display: none; z-index: 81;"></div>
+        <div class="elementchufmmwpblfe" data-x="100%" data-y="50%" data-position="1,2,,-80"
+             style="position: absolute; opacity: 1; width: 71px; z-index: 20; height: 21px; left: 264px; top: 320px;">
+            <div class="elementbgchlojdpvnwnv"
+                 style="width: 71px; height: 21px; position: absolute; opacity: 1; border-radius: 0px; z-index: 1;"></div>
+            <div class="elementbgchlojdpvnwnv_c" style="position: absolute; z-index: 2;">
+                <div class="elementnewchewranwvelr" data-i="0"
+                     style="float: left; width: 71px; height: 21px; margin: 0px;">
+                    <div class="elementnewchewranwvelr_bg"
+                         style="width: 71px; height: 21px; opacity: 1; border-radius: 0px; position: absolute; z-index: 2;"></div>
+                    <div class="elementnewchewranwvelr_text"
+                         style="opacity: 1; font-size: 16px; color: rgb(255, 255, 255); padding: 0px; white-space: nowrap; position: absolute; z-index: 3; cursor: pointer;">
+                        格式是.srt
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var videoObject = {
+        //playerID:'ckplayer01',//播放器ID，第一个字符不能是数字，用来在使用多个播放器时监听到的函数将在所有参数最后添加一个参数用来获取播放器的内容
+        container: '#video', //容器的ID或className
+        variable: 'player', //播放函数名称
+        loaded: 'loadedHandler', //当播放器加载后执行的函数
+        loop: true, //播放结束是否循环播放
+        //autoplay: true, //是否自动播放
+        //duration: 500, //设置视频总时间
+        cktrack: 'material/srt.srt', //字幕文件
+        poster: 'material/poster.jpg', //封面图片
+        preview: { //预览图片
+            file: ['material/mydream_en1800_1010_01.png', 'material/mydream_en1800_1010_02.png'],
+            scale: 2
+        },
+        config: '', //指定配置函数
+        debug: true, //是否开启调试模式
+        //flashplayer: true, //强制使用flashplayer
+        drag: 'start', //拖动的属性
+        seek: 0, //默认跳转的时间
+        //playbackrate:1,//默认速度的编号，只对html5有效,设置成-1则不显示倍速
+        //advertisements:'website:ad.json',
+        //front:'frontFun',//上一集的操作函数
+        //next:'nextFun',//下一集的操作函数
+        //广告部分开始
+        adfront: 'http://www.ckplayer.com/yytf/swf/front001.swf,http://www.ckplayer.com/yytf/swf/front002.swf', //前置广告
+        adfronttime: '15,15',
+        adfrontlink: '',
+        adpause: 'http://www.ckplayer.com/yytf/swf/pause001.swf,http://www.ckplayer.com/yytf/swf/pause002.swf',
+        adpausetime: '5,5',
+        adpauselink: '',
+        adinsert: 'http://www.ckplayer.com/yytf/swf/insert001.swf,http://www.ckplayer.com/yytf/swf/insert002.swf',
+        adinserttime: '10,10',
+        adinsertlink: '',
+        inserttime: '10,80',
+        adend: 'http://www.ckplayer.com/yytf/swf/end001.swf,http://www.ckplayer.com/yytf/swf/end002.swf',
+        adendtime: '15,15',
+        adendlink: '',
+        //广告部分结束
+        promptSpot: [ //提示点
+            {
+                words: '提示点文字01',
+                time: 30
+            },
+            {
+                words: '提示点文字02',
+                time: 150
+            }
+        ],
+        //mobileCkControls:true,//是否在移动端（包括ios）环境中显示控制栏
+        //live:true,//是否是直播视频，true=直播，false=点播
+        video: [
+            ['http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4', 'video/mp4', '中文标清', 0],
+            ['http://img.ksbbs.com/asset/Mon_1703/d0897b4e9ddd9a5.mp4', 'video/mp4', '中文高清', 0],
+            ['http://img.ksbbs.com/asset/Mon_1703/eb048d7839442d0.mp4', 'video/mp4', '英文高清', 10],
+            ['http://img.ksbbs.com/asset/Mon_1703/d30e02a5626c066.mp4', 'video/mp4', '英文超清', 0]
+        ]
+    };
+    var player = new ckplayer(videoObject);
+
+    function loadedHandler() {
+        player.addListener('error', errorHandler); //监听视频加载出错
+        player.addListener('loadedmetadata', loadedMetaDataHandler); //监听元数据
+        player.addListener('duration', durationHandler); //监听播放时间
+        player.addListener('time', timeHandler); //监听播放时间
+        player.addListener('play', playHandler); //监听暂停播放
+        player.addListener('pause', pauseHandler); //监听暂停播放
+        player.addListener('buffer', bufferHandler); //监听缓冲状态
+        player.addListener('seek', seekHandler); //监听跳转播放完成
+        player.addListener('seekTime', seekTimeHandler); //监听跳转播放完成
+        player.addListener('volume', volumeChangeHandler); //监听音量改变
+        player.addListener('full', fullHandler); //监听全屏/非全屏切换
+        player.addListener('ended', endedHandler); //监听播放结束
+        player.addListener('screenshot', screenshotHandler); //监听截图功能
+        player.addListener('mouse', mouseHandler); //监听鼠标坐标
+        player.addListener('frontAd', frontAdHandler); //监听前置广告的动作
+        player.addListener('wheel', wheelHandler); //监听视频放大缩小
+        player.addListener('controlBar', controlBarHandler); //监听控制栏显示隐藏事件
+        player.addListener('clickEvent', clickEventHandler); //监听点击事件
+        player.addListener('definitionChange', definitionChangeHandler); //监听清晰度切换事件
+        player.addListener('speed', speedHandler); //监听加载速度
+    }
+
+    function errorHandler() {
+        console.log('出错')
+        changeText('.playerstate', '状态：视频加载错误，停止执行其它动作，等待其它操作');
+    }
+
+    function loadedMetaDataHandler() {
+        var metaData = player.getMetaDate();
+        //console.log(metaData)
+        var html = ''
+        //console.log(metaData);
+        if (parseInt(metaData['videoWidth']) > 0) {
+            changeText('.playerstate', '状态：获取到元数据信息，如果数据错误，可以使用延迟获取');
+            html += '总时间：' + metaData['duration'] + '秒，';
+            html += '音量：' + metaData['volume'] + '（范围0-1），';
+            html += '播放器的宽度：' + metaData['width'] + 'px，';
+            html += '播放器的高度：' + metaData['height'] + 'px，';
+            html += '视频宽度：' + metaData['videoWidth'] + 'px，';
+            html += '视频高度：' + metaData['videoHeight'] + 'px，';
+            html += '视频原始宽度：' + metaData['streamWidth'] + 'px，';
+            html += '视频原始高度：' + metaData['streamHeight'] + 'px，';
+            html += '是否暂停状态：' + metaData['paused'];
+        } else {
+            changeText('.playerstate', '状态：未正确获取到元数据信息');
+            html = '没有获取到元数据';
+        }
+        changeText('.metadata', html);
+    }
+
+    function playHandler() {
+        //player.animateResume();//继续播放所有弹幕
+        changeText('.playstate', getHtml('.playstate') + ' 播放');
+        window.setTimeout(function () {
+            loadedMetaDataHandler();
+        }, 1000);
+        loadedMetaDataHandler();
+    }
+
+    function pauseHandler() {
+        //player.animatePause();//暂停所有弹幕
+        changeText('.playstate', getHtml('.playstate') + ' 暂停');
+        loadedMetaDataHandler();
+    }
+
+    function timeHandler(time) {
+        changeText('.currenttimestate', '当前播放时间（秒）：' + time);
+    }
+
+    function durationHandler(duration) {
+        changeText('.duration', '总时间（秒）：' + duration);
+    }
+
+    function seekHandler(state) {
+        changeText('.seekstate', getHtml('.seekstate') + ' ' + state);
+    }
+
+    function seekTimeHandler(time) {
+        changeText('.seekstate', getHtml('.seekstate') + ' seekTime:' + time);
+    }
+
+    function bufferHandler(buffer) {
+        //console.log(buffer);
+        changeText('.bufferstate', '缓冲：' + buffer);
+    }
+
+    function volumeChangeHandler(vol) {
+        changeText('.volumechangestate', '当前音量：' + vol);
+    }
+
+    function speedHandler(n) {
+        changeText('.speed', '当前加载速率：' + n);
+    }
+
+    function screenshotHandler(obj) {
+        changeText('.screenshot', '图片名称：' + obj['name'] + ',截图对象：' + obj['object'] + ',是否用户保存：' + obj['save'] + ',图片：<img src="' + obj['base64'] + '">');
+    }
+
+    function fullHandler(b) {
+        if (b) {
+            html = ' 全屏';
+        } else {
+            html = ' 否';
+        }
+        changeText('.fullstate', getHtml('.fullstate') + html);
+
+    }
+
+    function endedHandler() {
+        changeText('.endedstate', '播放结束');
+    }
+
+    function mouseHandler(obj) {
+        changeText('.mouse', '鼠标位置，x：' + obj['x'] + '，y：' + obj['y']);
+    }
+
+    function frontAdHandler(status) {
+        changeText('.frontad', getHtml('.frontad') + ' ' + status);
+    }
+
+    var zoomNow = 1;
+
+    function wheelHandler(n) {
+        if (n > 0) {
+            if (zoomNow < 5) {
+                zoomNow += 0.1;
+            }
+        } else {
+            if (zoomNow > 0) {
+                zoomNow -= 0.1;
+            }
+        }
+        player.videoZoom(zoomNow);//支持鼠标滚轮控制放大缩小
+    }
+
+    function controlBarHandler(show) {
+        if (show) {
+            html = ' 显示';
+        } else {
+            html = ' 隐藏';
+        }
+        changeText('.controlBar', getHtml('.controlBar') + html);
+    }
+
+    function clickEventHandler(eve) {
+        changeText('.clickEvent', getHtml('.clickEvent') + ' ' + eve);
+    }
+
+    function definitionChangeHandler(num) {
+        changeText('.definitionChange', getHtml('.definitionChange') + ',切换清晰度编号' + num);
+    }
+
+    var videoChangeNum = 0;
+
+    function seekTime() {
+        var time = parseInt(player.getByElement('.seektime').value);
+        var metaData = player.getMetaDate();
+        var duration = metaData['duration'];
+        if (time < 0) {
+            alert('请填写大于0的数字');
+            return;
+        }
+        if (time > duration) {
+            alert('请填写小于' + duration + '的数字');
+            return;
+        }
+        player.videoSeek(time);
+    }
+
+    function changeVolume() {
+        var volume = player.getByElement('.changevolume').value;
+        volume = Math.floor(volume * 100) / 100
+        if (volume < 0) {
+            alert('请填写大于0的数字');
+            return;
+        }
+        if (volume > 1) {
+            alert('请填写小于1的数字');
+            return;
+        }
+        player.changeVolume(volume);
+    }
+
+    function changeSize() {
+        player.changeSize(w, h)
+    }
+
+    function frontFun() {
+        alert('点击了前一集');
+    }
+
+    function nextFun() {
+        alert('点击了下一集');
+    }
+
+    function adjump() {
+        alert('点击了跳过广告按钮');
+    }
+
+    function newVideo() {
+        var videoUrl = player.getByElement('.videourl').value;
+        changeVideo(videoUrl);
+    }
+
+    function newVideo2() {
+        var videoUrl = player.getByElement('.videourl2').value;
+        changeVideo(videoUrl);
+    }
+
+    function changeVideo(videoUrl) {
+        if (player == null) {
+            return;
+        }
+
+        var newVideoObject = {
+            container: '#video', //容器的ID
+            variable: 'player',
+            autoplay: true, //是否自动播放
+            loaded: 'loadedHandler', //当播放器加载后执行的函数
+            video: videoUrl
+        }
+        //判断是需要重新加载播放器还是直接换新地址
+
+        if (player.playerType == 'html5video') {
+            if (player.getFileExt(videoUrl) == '.flv' || player.getFileExt(videoUrl) == '.m3u8' || player.getFileExt(videoUrl) == '.f4v' || videoUrl.substr(0, 4) == 'rtmp') {
+                player.removeChild();
+
+                player = null;
+                player = new ckplayer();
+                player.embed(newVideoObject);
+            } else {
+                player.newVideo(newVideoObject);
+            }
+        } else {
+            if (player.getFileExt(videoUrl) == '.mp4' || player.getFileExt(videoUrl) == '.webm' || player.getFileExt(videoUrl) == '.ogg') {
+                player = null;
+                player = new ckplayer();
+                player.embed(newVideoObject);
+            } else {
+                player.newVideo(newVideoObject);
+            }
+        }
+    }
+
+    var elementTemp = null; //保存元件
+    function newElement() {
+        if (elementTemp != null) {
+            alert('为了演示的简单性，本实例只能建立一个元件');
+            return;
+        }
+        var attribute = {
+            list: [ //list=定义元素列表
+                {
+                    type: 'png', //定义元素类型：只有二种类型，image=使用图片，text=文本
+                    file: 'material/logo.png', //图片地址
+                    radius: 30, //图片圆角弧度
+                    width: 30, //定义图片宽，必需要定义
+                    height: 30, //定义图片高，必需要定义
+                    alpha: 0.9, //图片透明度(0-1)
+                    marginLeft: 10, //图片离左边的距离
+                    marginRight: 10, //图片离右边的距离
+                    marginTop: 10, //图片离上边的距离
+                    marginBottom: 10, //图片离下边的距离
+                    clickEvent: "link->http://www.ckplayer.com"
+                }, {
+                    type: 'text', //说明是文本
+                    text: '演示弹幕内容，弹幕只支持普通文本，不支持HTML', //文本内容
+                    color: '0xFFDD00', //文本颜色
+                    size: 14, //文本字体大小，单位：px
+                    font: '"Microsoft YaHei", YaHei, "微软雅黑", SimHei,"\5FAE\8F6F\96C5\9ED1", "黑体",Arial', //文本字体
+                    leading: 30, //文字行距
+                    alpha: 1, //文本透明度(0-1)
+                    paddingLeft: 10, //文本内左边距离
+                    paddingRight: 10, //文本内右边距离
+                    paddingTop: 0, //文本内上边的距离
+                    paddingBottom: 0, //文本内下边的距离
+                    marginLeft: 0, //文本离左边的距离
+                    marginRight: 10, //文本离右边的距离
+                    marginTop: 10, //文本离上边的距离
+                    marginBottom: 0, //文本离下边的距离
+                    backgroundColor: '0xFF0000', //文本的背景颜色
+                    backAlpha: 0.5, //文本的背景透明度(0-1)
+                    backRadius: 30, //文本的背景圆角弧度
+                    clickEvent: "actionScript->videoPlay"
+                }
+            ],
+            x: 10, //元件x轴坐标，注意，如果定义了position就没有必要定义x,y的值了，x,y支持数字和百分比，使用百分比时请使用单引号，比如'50%'
+            y: 50, //元件y轴坐标
+            //position:[1,1],//位置[x轴对齐方式（0=左，1=中，2=右），y轴对齐方式（0=上，1=中，2=下），x轴偏移量（不填写或null则自动判断，第一个值为0=紧贴左边，1=中间对齐，2=贴合右边），y轴偏移量（不填写或null则自动判断，0=紧贴上方，1=中间对齐，2=紧贴下方）]
+            alpha: 1, //元件的透明度
+            backgroundColor: '0xFFDD00', //元件的背景色
+            backAlpha: 0.5, //元件的背景透明度(0-1)
+            backRadius: 60, //元件的背景圆角弧度
+            clickEvent: "actionScript->videoPlay"
+        }
+        elementTemp = player.addElement(attribute);
+    }
+
+    function deleteElement() {
+        if (elementTemp != null) {
+            player.deleteElement(elementTemp);
+            elementTemp = null;
+        } else {
+            alert('演示删除元件需要先添加');
+        }
+    }
+
+    function newDanmu() {
+        //弹幕说明
+
+        var danmuObj = {
+            list: [{
+                type: 'image', //定义元素类型：只有二种类型，image=使用图片，text=文本
+                file: 'material/logo.png', //图片地址
+                radius: 30, //图片圆角弧度
+                width: 30, //定义图片宽，必需要定义
+                height: 30, //定义图片高，必需要定义
+                alpha: 0.9, //图片透明度(0-1)
+                marginLeft: 10, //图片离左边的距离
+                marginRight: 10, //图片离右边的距离
+                marginTop: 10, //图片离上边的距离
+                marginBottom: 10, //图片离下边的距离
+                clickEvent: "link->http://"
+            }, {
+                type: 'text', //说明是文本
+                text: '演示弹幕内容，弹幕只支持普通文本，不支持HTML', //文本内容
+                color: '0xFFDD00', //文本颜色
+                size: 14, //文本字体大小，单位：px
+                font: '"Microsoft YaHei", YaHei, "微软雅黑", SimHei,"\5FAE\8F6F\96C5\9ED1", "黑体",Arial', //文本字体
+                leading: 30, //文字行距
+                alpha: 1, //文本透明度(0-1)
+                paddingLeft: 10, //文本内左边距离
+                paddingRight: 10, //文本内右边距离
+                paddingTop: 0, //文本内上边的距离
+                paddingBottom: 0, //文本内下边的距离
+                marginLeft: 0, //文本离左边的距离
+                marginRight: 10, //文本离右边的距离
+                marginTop: 10, //文本离上边的距离
+                marginBottom: 0, //文本离下边的距离
+                backgroundColor: '0xFF0000', //文本的背景颜色
+                backAlpha: 0.5, //文本的背景透明度(0-1)
+                backRadius: 30, //文本的背景圆角弧度
+                clickEvent: "actionScript->videoPlay"
+            }],
+            x: '100%', //x轴坐标
+            y: "50%", //y轴坐标
+            //position:[2,1,0],//位置[x轴对齐方式（0=左，1=中，2=右），y轴对齐方式（0=上，1=中，2=下），x轴偏移量（不填写或null则自动判断，第一个值为0=紧贴左边，1=中间对齐，2=贴合右边），y轴偏移量（不填写或null则自动判断，0=紧贴上方，1=中间对齐，2=紧贴下方）]
+            alpha: 1,
+            //backgroundColor:'#FFFFFF',
+            backAlpha: 0.8,
+            backRadius: 30 //背景圆角弧度
+        }
+        var danmu = player.addElement(danmuObj);
+        var danmuS = player.getElement(danmu);
+        var obj = {
+            element: danmu,
+            parameter: 'x',
+            static: true, //是否禁止其它属性，true=是，即当x(y)(alpha)变化时，y(x)(x,y)在播放器尺寸变化时不允许变化
+            effect: 'None.easeOut',
+            start: null,
+            end: -danmuS['width'],
+            speed: 10,
+            overStop: true,
+            pauseStop: true,
+            callBack: 'deleteChild'
+        };
+        var danmuAnimate = player.animate(obj);
+    }
+
+    function deleteChild(ele) {
+        if (player) {
+            player.deleteElement(ele);
+        }
+    }
+
+    function changeText(div, text) {
+        player.getByElement(div).innerHTML = text;
+    }
+
+    function getHtml(div) {
+        return player.getByElement(div).innerHTML;
+    }
+
+    var zoom = 1;
+</script>
+<p>
+    <a href="http://www.ckplayer.com/" target="_blank">官网：http://www.ckplayer.com</a>,版本号：X</p>
+<p>以下仅列出部分功能，全部功能请至官网
+    <a href="http://www.ckplayer.com/manualX/" target="_blank">《手册》</a>查看</p>
+<p>
+    <button type="button" onclick="player.videoPlay()">播放</button>
+    <button type="button" onclick="player.videoPause()">暂停</button>
+    <button type="button" onclick="player.playOrPause()">播放/暂停</button>
+    <button type="button" onclick="player.videoMute()">静音</button>
+    <button type="button" onclick="player.videoEscMute()">取消静音</button>
+    <button type="button" onclick="player.videoClear()">清除视频(仅flashplayer)</button>
+    <button type="button" onclick="loadedMetaDataHandler()">获取元数据</button>
+    <button type="button" onclick="newElement()">添加元件</button>
+    <button type="button" onclick="deleteElement()">删除元件</button>
+    <button type="button" onclick="newDanmu()">添加弹幕</button>
+    <button type="button" onclick="player.screenshot(&#39;video&#39;,false,&#39;视频截图&#39;)">视频截图(需要视频权限)</button>
+    <button type="button" onclick="player.screenshot(&#39;player&#39;,false,&#39;播放器截图&#39;)">播放器截图(需要视频权限)</button>
+</p>
+<p>
+    <button type="button" onclick="player.adPause()">暂停广告(仅flashplayer)</button>
+    <button type="button" onclick="player.adPlay()">继续播放广告(仅flashplayer)</button>
+    <button type="button" onclick="player.videoPlay()">关闭（结束）广告(仅flashplayer)</button>
+</p>
+<p>
+    <button type="button" onclick="player.changeControlBarShow(true)">显示控制栏</button>
+    <button type="button" onclick="player.changeControlBarShow(false)">隐藏控制栏</button>
+</p>
+<p>
+    <button type="button" onclick="player.videoRotation()">默认角度</button>
+    <button type="button" onclick="player.videoRotation(1)">顺时针旋转</button>
+    <button type="button" onclick="player.videoRotation(-1)">逆时针旋转</button>
+    <button type="button" onclick="player.videoRotation(90)">旋转90</button>
+    <button type="button" onclick="player.videoRotation(180)">旋转180</button>
+    <button type="button" onclick="player.videoRotation(270)">旋转270</button>
+    <button type="button" onclick="player.videoRotation(-90)">旋转-90</button>
+    <button type="button" onclick="player.videoRotation(-180)">旋转-180</button>
+    <button type="button" onclick="player.videoRotation(-270)">旋转-270</button>
+</p>
+<p>
+    <button type="button" onclick="player.videoZoom(1)">默认大小</button>
+    <button type="button" onclick="player.videoZoom(zoom+=0.1)">放大</button>
+    <button type="button" onclick="player.videoZoom(zoom-=0.1)">缩小</button>
+</p>
+<p>
+    <button type="button" onclick="player.changePlaybackRate(1)">默认速度(仅H5)</button>
+    <button type="button" onclick="player.changePlaybackRate(0)">0.5倍(仅H5)</button>
+    <button type="button" onclick="player.changePlaybackRate(3)">1.5倍(仅H5)</button>
+    <button type="button" onclick="player.changePlaybackRate(4)">2倍(仅H5)</button>
+
+</p>
+<p>
+    <button type="button" onclick="player.changeConfig(&#39;config&#39;,&#39;timeScheduleAdjust&#39;,1)">正常拖动</button>
+    <button type="button" onclick="player.changeConfig(&#39;config&#39;,&#39;timeScheduleAdjust&#39;,0)">不能拖动</button>
+    <button type="button" onclick="player.changeConfig(&#39;config&#39;,&#39;timeScheduleAdjust&#39;,2)">只能前进（向右拖动）
+    </button>
+    <button type="button" onclick="player.changeConfig(&#39;config&#39;,&#39;timeScheduleAdjust&#39;,3)">只能后退</button>
+    <button type="button" onclick="player.changeConfig(&#39;config&#39;,&#39;timeScheduleAdjust&#39;,4)">能回到第一次拖动时的位置
+    </button>
+    <button type="button" onclick="player.changeConfig(&#39;config&#39;,&#39;timeScheduleAdjust&#39;,5)">看过的地方可以随意拖动
+    </button>
+</p>
+<p>
+    <button type="button" onclick="player.videoProportion()">原始比例(仅flashplayer)</button>
+    <button type="button" onclick="player.videoProportion(4,3)">4:3(仅flashplayer)</button>
+    <button type="button" onclick="player.videoProportion(16,9)">16:9(仅flashplayer)</button>
+</p>
+<p>
+    <button type="button" onclick="player.videoBrightness(100)">调整亮度(仅flashplayer)</button>
+    <button type="button" onclick="player.videoBrightness(0)">恢复亮度(仅flashplayer)</button>
+    <button type="button" onclick="player.videoContrast(200)">调整对比度(仅flashplayer)</button>
+    <button type="button" onclick="player.videoContrast(127.5)">恢复对比度(仅flashplayer)</button>
+    <button type="button" onclick="player.videoSaturation(0)">调整饱和度(仅flashplayer)</button>
+    <button type="button" onclick="player.videoSaturation(1)">恢复饱和度(仅flashplayer)</button>
+    <button type="button" onclick="player.videoHue(-90)">调整色相(仅flashplayer)</button>
+    <button type="button" onclick="player.videoHue(0)">恢复色相(仅flashplayer)</button>
+</p>
+<p>
+    <input type="text" class="videourl" style="width: 500px;" placeholder="视频地址"
+           value="http://www.flashls.org/playlists/test_001/stream_1000k_48k_640x360.m3u8">
+
+    <button type="button" onclick="newVideo()">播放</button>
+</p>
+<p>
+    <input type="text" class="videourl2" style="width: 500px;" placeholder="视频地址"
+           value="http://img.ksbbs.com/asset/Mon_1703/d30e02a5626c066.mp4">
+
+    <button type="button" onclick="newVideo2()">播放</button>
+
+</p>
+<p class="metadata">
+    总时间：238.098秒，音量：0.8（范围0-1），播放器的宽度：600px，播放器的高度：400px，视频宽度：600px，视频高度：400px，视频原始宽度：1081px，视频原始高度：608px，是否暂停状态：false</p>
+<p>单独监听功能：</p>
+<p class="handler">
+    <span class="duration">总时间（秒）：238.098</span><br>
+    <span class="playstate">播放状态： 播放 暂停 播放 暂停 播放 暂停 播放</span><br>
+    <span class="seekstate">跳转状态:无 seekTime:[object Object] start ended</span><br>
+    <span class="bufferstate">缓冲：100</span><br>
+    <span class="speed">加载速率：0</span><br>
+    <span class="volumechangestate">当前音量：0.8</span><br>
+    <span class="fullstate">是否全屏：否 全屏 全屏</span><br>
+    <span class="controlBar">控制栏：显示 显示 显示 显示</span><br>
+    <span class="endedstate">还未结束</span><br>
+    <span class="currenttimestate">当前播放时间（秒）：41.184511</span><br>
+    <span class="frontad">前置广告状态：</span><br>
+    <span class="mouse">鼠标位置</span><br>
+    <span class="definitionChange">切换清晰度：</span><br>
+    <span class="clickEvent">点击监听： actionScript-&gt;videoPlay actionScript-&gt;videoPause actionScript-&gt;videoPlay actionScript-&gt;fullScreen actionScript-&gt;quitFullScreen</span><br>
+    <span class="screenshot">监听截图功能（截图功能需要视频权限）</span>
+
+</p>
+<div class="menuchfarfojndaf"
+     style="background-color: rgb(255, 255, 255); padding: 5px; position: absolute; left: 10px; top: 20px; display: none; z-index: 999; color: rgb(161, 169, 190); box-shadow: rgb(170, 170, 170) 2px 2px 3px;">
+    <p style="height: 30px; line-height: 30px; margin: 0px; font-size: 12px; padding-left: 10px; padding-right: 30px;">
+        <a href="http://www.ckplayer.com/" undefined="" style="color: rgb(0, 0, 0); text-decoration: none;">ckplayer</a>
+    </p>
+    <p style="height: 30px; line-height: 30px; margin: 0px; font-size: 12px; padding-left: 10px; padding-right: 30px; border-bottom: 1px solid rgb(233, 233, 233);">
+        version:X</p></div>
+</body>
+</html>
