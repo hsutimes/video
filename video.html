@@ -974,11 +974,12 @@
     </div>
 </header>
 
-<div class="jsk-container jsk-container-sm"><h1><i class="jsk-icon-wrench"></i> 视频列表</h1>
+<div class="jsk-container jsk-container-sm">
+    <h1><i class="jsk-icon-wrench"></i> 视频内容</h1>
     <div class="jsk-panel jsk-margin-top-0">
         <div class="jsk-panel-bd">
             <div class="panel-lead">
-                <div class="panel-order jsk-u-md-10"><i class="jsk-icon-tag"></i>poster</div>
+                <div class="panel-order jsk-u-md-10"><i class="jsk-icon-tag"></i><b id="video-name"></b></div>
                 <div class="jsk-align-right"><i class="jsk-icon-heart-o"></i>100</div>
             </div>
             <div id="video"></div>
@@ -995,9 +996,10 @@
         <a class="jsk-footer-ysp" href="#" target="_blank">使用协议</a>
         <span class="jsk-footer-divider"> / </span>
         <a class="jsk-footer-ysp"
-           data-jsk-popover="{&quot;content&quot;:&quot;&lt;p class=\&quot;jsk-text-center jsk-margin-bottom-sm\&quot;&gt;\u8bf7\u901a\u8fc7\u5fae\u4fe1\u626b\u63cf\u4ee5\u4e0b\u4e8c\u7ef4\u7801&lt;\/p&gt;&lt;img src=\&quot;\/\/res.jisuanke.com\/img\/upload\/20160526\/fbfb5a819b7ca6a9a3585aaa97aca5785f305d66.jpg\&quot; class=\&quot;jsk-radius\&quot; style=\&quot;width: 200px\&quot; \/&gt;&quot;}"><i
+           data-jsk-popover="{&quot;content&quot;:&quot;&lt;p class=\&quot;jsk-text-center jsk-margin-bottom-sm\&quot;&gt;\u8bf7\u901a\u8fc7\u5fae\u4fe1\u626b\u63cf\u4ee5\u4e0b\u4e8c\u7ef4\u7801&lt;\/p&gt;&lt;img src=\&quot;assets/img/12135.png\&quot; class=\&quot;jsk-radius\&quot; style=\&quot;width: 200px\&quot; \/&gt;&quot;}"><i
                 class="jsk-icon-wechat"></i>微信</a>
-        <a class="jsk-footer-ysp" href="https://weibo.com/u/6040448319/home" target="_blank"><i class="jsk-icon-weibo"></i>微博</a>
+        <a class="jsk-footer-ysp" href="https://weibo.com/u/6040448319/home" target="_blank"><i
+                class="jsk-icon-weibo"></i>微博</a>
     </div>
     <div class="jsk-footer-miscs">
         <p>© <a href="#" title="XXX网络科技有限公司" target="_blank">XXX网络科技有限公司</a></p>
@@ -1018,13 +1020,17 @@
 
 <script type="text/javascript" src="assets/js/ckplayer/ckplayer.js"></script>
 <script type="text/javascript">
-    var videoObject = {
-        container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
-        variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
-        poster: 'assets/mv/img/poster.jpg',//封面图片
-        video: 'http://ckplayer-video.oss-cn-shanghai.aliyuncs.com/ckplayer-sample/mydream_zh_768-432.mp4'//视频地址
-    };
-    var player = new ckplayer(videoObject);
+    $(document).ready(function () {
+        var video = JSON.parse(localStorage.video);
+        $('#video-name').text(video.name);
+        var videoObject = {
+            container: '#video',    //“#”代表容器的ID，“.”或“”代表容器的class
+            variable: 'player',     //该属性必需设置，值等于下面的new chplayer()的对象
+            poster: video.cover,          //封面图片
+            video: video.url              //视频地址
+        };
+        var player = new ckplayer(videoObject);
+    });
 </script>
 </body>
 </html>

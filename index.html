@@ -974,17 +974,28 @@
     </div>
 </header>
 
-<div class="jsk-container jsk-container-sm"><h1><i class="jsk-icon-wrench"></i> 视频列表</h1>
+<div id="video-list" class="jsk-container jsk-container-sm">
+    <h1><i class="jsk-icon-wrench"></i> 视频列表</h1>
     <div class="jsk-panel jsk-margin-top-0">
         <div class="jsk-panel-bd">
             <div class="panel-lead">
                 <ul class="panel-order jsk-show-md-up jsk-u-md-10">
                     <li>排序方式：</li>
-                    <li id="visit_0"><button class="jsk-btn">精选</button></li>
-                    <li id="visit_1"><button class="jsk-btn">搞笑</button></li>
-                    <li id="visit_2"><button class="jsk-btn">美女</button></li>
-                    <li id="visit_3"><button class="jsk-btn">体育</button></li>
-                    <li id="visit_4"><button class="jsk-btn">新闻</button></li>
+                    <li id="visit_0">
+                        <button class="jsk-btn">精选</button>
+                    </li>
+                    <li id="visit_1">
+                        <button class="jsk-btn">搞笑</button>
+                    </li>
+                    <li id="visit_2">
+                        <button class="jsk-btn">美女</button>
+                    </li>
+                    <li id="visit_3">
+                        <button class="jsk-btn">体育</button>
+                    </li>
+                    <li id="visit_4">
+                        <button class="jsk-btn">新闻</button>
+                    </li>
                 </ul>
                 <div class="jsk-align-right"><i class="jsk-icon-video-camera"></i><b id="info-count"></b></div>
             </div>
@@ -1023,6 +1034,8 @@
 <script type="text/javascript" src="assets/js/jsk-base--b783c3.js" charset="utf-8"></script>
 <script type="text/javascript" src="assets/js/jsk-widget--a6a509.js" charset="utf-8"></script>
 <script type="text/javascript" src="assets/js/jquery.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="assets/js/ckplayer/ckplayer.js"></script>
 <script>
     $(document).ready(function () {
         loadTypePage(0, 1);
@@ -1058,14 +1071,16 @@
                 $("#panel-info").text('');
                 $("#info-count").text(l);
                 for (var i = 0; i < l; i++) {
-                    $("#panel-info").append('<li class="jsk-thumbnail" _v-97b7bccc=""><a target="_blank"\n' +
-                        '                                          href="video.html">\n' +
-                        '                    <div class="jsk-thumbnail-inner" _v-97b7bccc="">\n' +
+                    $("#panel-info").append('<li class="jsk-thumbnail">' +
+                        '               <a href="video.html" target="">\n' +
+                        '                    <div class="jsk-thumbnail-inner">\n' +
                         '                        <div class="jsk-thumbnail-image jsk-thumbnail-image-primary jsk-text-center thumbnail-image"\n' +
-                        '                             _v-97b7bccc=""\n' +
                         '                             style="background-image: url(' + result.data[i].cover + ');"></div>\n' +
-                        '                        <div class="jsk-thumbnail-caption jsk-thumbnail-caption-primary" _v-97b7bccc=""><h3\n' +
-                        '                                _v-97b7bccc="">' + result.data[i].topicName + '</h3></div>\n' +
+                        '                        <div class="jsk-thumbnail-caption jsk-thumbnail-caption-primary">' +
+                        '                              <h3>' + result.data[i].topicName + '</h3>' +
+                        '                              <b style="display: none">' + result.data[i].cover + '</b>' +
+                        '                              <b style="display: none">' + result.data[i].mp4_url + '</b>' +
+                        '                        </div>\n' +
                         '                    </div>\n' +
                         '                </a></li>');
                 }
@@ -1075,6 +1090,20 @@
             }
         });
     }
+
+    $('#panel-info').on('click', 'a', function () {
+        var a, name, cover, url, json;
+        a = $(this);
+        name = a.find('h3').text();
+        cover = a.find('b').first().text();
+        url = a.find('b').last().text();
+        json = {
+            "name": name,
+            "cover": cover,
+            "url": url
+        };
+        localStorage.video = JSON.stringify(json);
+    });
 </script>
 </body>
 </html>
